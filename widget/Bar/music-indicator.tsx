@@ -17,27 +17,26 @@ export default function MusicIndicator() {
   const title = createBinding(spotify, "title");
   const coverArt = createBinding(spotify, "coverArt");
 
-  const chip = new Gtk.Label({ label: "\uf1bc", css_classes: ["MusicChip"] })
-  const controller = new Gtk.EventControllerMotion();
-  chip.add_controller(controller);
-  chip.set_halign(Gtk.Align.END);
+  const setupRevealerChip = (self: Gtk.Label) => {
+    let timer: GLib.Source | undefined = undefined;
 
-  let timer: GLib.Source | undefined = undefined;
+    const motionController = new Gtk.EventControllerMotion();
+    self.add_controller(motionController);
 
-  controller.connect("enter", () => {
-    setRevealChild(true);
-    if (Boolean(timer)) clearTimeout(timer!);
-    if (!chip.has_css_class("Expanded"))
-      chip.add_css_class("Expanded");
-  });
+    motionController.connect("enter", () => {
+      setRevealChild(true);
+      if (Boolean(timer)) clearTimeout(timer!);
+      if (!self.has_css_class("Expanded")) self.add_css_class("Expanded");
+    });
 
-  controller.connect("leave", () => {
-    setRevealChild(false);
-    timer = setTimeout(() => {
-      if (chip.has_css_class("Expanded"))
-        chip.remove_css_class("Expanded");
-    }, REVEAL_TIMEOUT / 1.5);
-  });
+    motionController.connect("leave", () => {
+      setRevealChild(false);
+      timer = setTimeout(() => {
+        if (self.has_css_class("Expanded"))
+          self.remove_css_class("Expanded");
+      }, REVEAL_TIMEOUT / 1.5);
+    });
+  }
 
   return (
     <box class="MusicIndicator">
@@ -64,7 +63,12 @@ export default function MusicIndicator() {
                 />
               </box>
             </Gtk.Revealer>
-            {chip}
+            <label
+              label={"\uf1bc"}
+              class="MusicChip"
+              halign={Gtk.Align.END}
+              $={setupRevealerChip}
+            />
           </box>
         )}
       </With>
