@@ -122,7 +122,6 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
     <window
       class="Dashboard"
       name="Dashboard"
-      visible
       gdkmonitor={gdkmonitor}
       exclusivity={Astal.Exclusivity.NORMAL}
       anchor={TOP}
