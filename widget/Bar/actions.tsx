@@ -1,4 +1,4 @@
-import { createBinding } from "gnim";
+import { createBinding, createComputed } from "gnim";
 import MusicIndicator from "./music-indicator";
 
 import Network from "gi://AstalNetwork";
@@ -10,11 +10,15 @@ const wp = Wp.get_default();
 
 // FIXME: I need to try this out in a system with wifi support
 export function NetworkIcon() {
-  const wifiIcon = createBinding(network.wifi, "iconName");
-  const wiredIcon = createBinding(network.wired, "iconName");
+  const { UNMANAGED, FAILED, DISCONNECTED } = Network.DeviceState;
+
+  const wiredIcon = createComputed([
+    createBinding(network.wired, "iconName"),
+    createBinding(network.wired, "state"),
+  ], (icon, state) => [UNMANAGED, FAILED, DISCONNECTED].includes(state) ? "network-offline" : icon);
 
   return (
-    <image iconName={wiredIcon(i => i ?? wifiIcon.get())} />
+    <image iconName={wiredIcon} />
   );
 }
 

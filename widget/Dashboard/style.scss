@@ -1,0 +1,66 @@
+@use 'sass:color';
+@use '../../theme.scss' as *;
+
+window.Dashboard {
+  background: transparent;
+  color: $foreground;
+  font-family: $font-regular;
+  font-size: 14px;
+  font-weight: 500;
+
+  .MainContent {
+    background: rgba($background, 0.65);
+    border-radius: 10px;
+
+    .Left, .Right { padding: 12px; }
+    .Right { padding-right: 14px; }
+
+    .Separator {
+      background-color: $contrast1;
+    }
+
+    .Left {
+      padding-left: 14px;
+
+      & .Clock {
+        & .Time {
+          font-size: 54px;
+          font-weight: 300;
+        }
+
+        & .Day {
+          color: $light_black;
+          font-size: 12px;
+        }
+      }
+
+      .SlidersContainer {
+        background-color: $contrast1;
+        padding: 7px 10px;
+        border-radius: 7px;
+        margin-top: 12px;
+
+        label.Title {
+          color: color.adjust($light_black, $lightness: 25%);
+          font-size: 12px;
+        }
+
+        .VolumeSlider {
+          & scale trough {
+            all: unset;
+            background-color: $contrast2;
+            min-height: 4px;
+            min-width: 170px;
+            border-radius: 100px;
+
+            & highlight {
+              all: unset;
+              border-radius: 100px;
+              background-color: $white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
