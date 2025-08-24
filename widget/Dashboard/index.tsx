@@ -5,6 +5,7 @@ import { createPoll } from "ags/time";
 import { S_PER_MS } from "../../constants";
 
 import Wp from "gi://AstalWp";
+import MusicPlayer from "./music-player";
 
 function Clock() {
   const contents = createPoll("00:00", 1 * S_PER_MS, "date '+%H:%M'")
@@ -99,12 +100,13 @@ function MainInformation() {
       hexpand
       vexpand
       class="Left"
-      widthRequest={320}
+      widthRequest={400}
       orientation={Gtk.Orientation.VERTICAL}
       spacing={7}
     >
       <Clock />
       <Sliders />
+      <MusicPlayer />
     </box>
   );
 }
@@ -125,11 +127,13 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
       gdkmonitor={gdkmonitor}
       exclusivity={Astal.Exclusivity.NORMAL}
       anchor={TOP}
-      application={app}
+      visible
       marginTop={7}
+      application={app}
     >
       <box class="MainContent" orientation={Gtk.Orientation.HORIZONTAL}>
         <MainInformation />
+        {/* TODO: Notifications Panel */}
         {/* <Separator /> */}
         {/* <box hexpand vexpand class="Right"> */}
         {/*   <label */}

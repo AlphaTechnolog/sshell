@@ -11,6 +11,7 @@ window.Dashboard {
   .MainContent {
     background: rgba($background, 0.65);
     border-radius: 10px;
+    border: solid 1px $contrast1;
 
     .Left, .Right { padding: 12px; }
     .Right { padding-right: 14px; }
@@ -60,6 +61,106 @@ window.Dashboard {
             }
           }
         }
+      }
+
+      .MusicPlayerContainer {
+        margin-top: 12px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border-radius: 12px;
+        padding: 12px;
+
+        &.Disabled {
+          background: linear-gradient(to right, rgba($white, 0.05), rgba($white, 0.125));
+        }
+
+        .PlayingFromChip {
+          $fg: $green;
+          $bg: rgba($green, 0.25);
+
+          background-color: $bg;
+          color: $fg;
+          border-radius: 100px;
+          padding: 2px 12px;
+
+          .Contents { font-size: 12px; }
+
+          .Icon {
+            font-size: 18px;
+            font-family: $font-nf;
+          }
+        }
+
+        .ControlsContainer {
+          .Information {
+            .Title {
+              font-size: 16px;
+              font-weight: bold;
+            }
+
+            .Artist {
+              font-size: 12px;
+              color: $contrast2;
+            }
+
+            .PlayPauseButton {
+              font-family: $font-icons;
+              font-size: 18px;
+              font-weight: bold;
+              border-radius: 100px;
+              padding: 10px 11px 10px 9px;
+              background-color: $white;
+              color: $black;
+              transition-property: background-color;
+              transition-duration: .25s;
+              transition-timing-function: ease;
+
+              &.Playing {
+                padding: 10px;
+              }
+
+              &:hover {
+                background-color: color.adjust($color: $white, $lightness: -10%);
+              }
+            }
+          }
+
+          .Controls {
+            & scale trough {
+              all: unset;
+              background-color: $contrast2;
+              min-height: 4px;
+              min-width: 170px;
+              border-radius: 100px;
+
+              & highlight {
+                all: unset;
+                border-radius: 100px;
+                background-color: $white;
+              }
+            }
+
+            button {
+              border-radius: 100px;
+              padding: 5px;
+              transition: all ease .2s;
+              font-family: $font-icons;
+              font-size: 14px;
+              font-weight: bold;
+
+              &:hover {
+                background: $contrast1;
+              }
+            }
+          }
+        }
+      }
+
+      .MusicPlayerSkeleton {
+        background: linear-gradient(to right, #101010, #242424);
+        border-radius: 7px;
+        margin-top: 12px;
       }
     }
   }
