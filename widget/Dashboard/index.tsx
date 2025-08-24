@@ -127,7 +127,6 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
       gdkmonitor={gdkmonitor}
       exclusivity={Astal.Exclusivity.NORMAL}
       anchor={TOP}
-      visible
       marginTop={7}
       application={app}
     >
