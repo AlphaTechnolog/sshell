@@ -40,7 +40,7 @@ function Notification({ notif: n, remove }: NotifProps) {
     return "";
   }
 
-  const handleSetup = (_self: Gtk.Box) => timeout(5000 * S_PER_MS, () => {
+  const handleSetup = (_self: Gtk.Box) => timeout(5 * S_PER_MS, () => {
     remove(n.id);
   });
 
