@@ -26,6 +26,8 @@ window.Bar {
         background-color: $contrast1;
         color: $foreground;
       }
+
+      &.Focused:hover { background-color: $contrast2; }
     }
 
     .ClickableClock {

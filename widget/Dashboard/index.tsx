@@ -8,6 +8,7 @@ import { S_PER_MS } from "../../constants";
 
 import Wp from "gi://AstalWp";
 import MusicPlayer from "./music-player";
+import Notifications from "./notifications";
 import { Brightness, Uptime } from "../../services/";
 import { capitalize } from "../../utils";
 
@@ -122,7 +123,7 @@ function UserContainer() {
           spacing={2}
         >
           <label
-            label={`Hi ${capitalize(whoami)}`}
+            label={capitalize(whoami)}
             hexpand
             halign={Gtk.Align.START}
             class="Whoami"
@@ -284,20 +285,11 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
       anchor={TOP}
       marginTop={7}
       application={app}
-      visible
     >
       <box class="MainContent" orientation={Gtk.Orientation.HORIZONTAL}>
         <MainInformation />
-        {/* TODO: Notifications Panel */}
-        {/* <Separator /> */}
-        {/* <box hexpand vexpand class="Right" widthRequest={400}> */}
-        {/*   <label */}
-        {/*     hexpand */}
-        {/*     halign={Gtk.Align.CENTER} */}
-        {/*     valign={Gtk.Align.START} */}
-        {/*     label="hello 2" */}
-        {/*   /> */}
-        {/* </box> */}
+        <Separator />
+        <Notifications />
       </box>
     </window>
   );

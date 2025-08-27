@@ -13,23 +13,20 @@ window.Dashboard {
     border-radius: 10px;
     border: solid 0px transparent;
 
-    .Left, .Right { padding: 12px; }
-    .Right { padding-right: 14px; }
+    .Left, .Right { padding: 14px; }
 
     .Separator {
       background-color: $contrast1;
     }
 
     .Left {
-      padding-left: 14px;
-
-      & .Clock {
-        & .Time {
+      .Clock {
+        .Time {
           font-size: 60px;
           font-weight: 300;
         }
 
-        & .Day {
+        .Day {
           color: $light_black;
           font-size: 12px;
         }
@@ -88,8 +85,8 @@ window.Dashboard {
           font-family: $font-icons;
           transition: all ease .2s;
           &.LockButton {
-            color: $blue;
-            &:hover { background-color: rgba($blue, 0.15); }
+            color: $accent;
+            &:hover { background-color: rgba($accent, 0.15); }
           }
           &.PoweroffButton {
             color: $red;
@@ -223,6 +220,133 @@ window.Dashboard {
         background: linear-gradient(to right, #101010, #242424);
         border-radius: 7px;
         margin-top: 12px;
+      }
+    }
+
+    .Right {
+      .Header {
+        padding: 0px 6px;
+
+        label {
+          font-family: $font-regular;
+          font-size: 28px;
+          font-weight: bold;
+        }
+      }
+
+      .Content {
+        padding: 12px 0px;
+
+        // TODO: Remove
+        label {
+          font-size: 13px;
+          font-weight: 500;
+        }
+
+        .NotificationItem {
+          background-color: $contrast1;
+          border-radius: 12px;
+
+          .Header {
+            background-color: $contrast1;
+            padding: 6px 12px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+
+            label {
+              font-size: 15px;
+              font-weight: bold;
+            }
+
+            .DismissButton {
+              background-color: $contrast1;
+              border-radius: 100px;
+              color: $red;
+              transition: all ease .2s;
+              padding: 4px;
+              &:hover { background-color: rgba($red, 0.15); }
+
+              label {
+                font-size: 14px;
+                font-family: $font-icons;
+                font-weight: bold;
+              }
+            }
+          }
+
+          .Content {
+            padding: 12px;
+
+            .FallbackIcon {
+              font-family: $font-icons;
+              font-size: 24px;
+              font-weight: bolder;
+              background: linear-gradient(to bottom right, $background, color.adjust($background, $lightness: 8%));
+              color: $white;
+              border: solid 2px $black;
+              border-radius: 100px;
+            }
+
+            .IconsContainer {
+              .NotifImage {
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+                border-radius: 100px;
+                border: solid 2px transparent;
+                &.GoodBorder { border-color: $accent; }
+                &.SubtleBorder { border-color: $black; }
+              }
+
+              .InhomeIcon {
+                font-family: $font-icons;
+                font-size: 14px;
+                font-weight: bold;
+                padding: 4px;
+                background-color: $accent;
+                color: $background;
+                border-radius: 100px;
+                // I want nerd font spotify instead ;-;
+                &.Spotify {
+                  font-family: $font-nf;
+                  font-size: 14px;
+                  padding: 1px 6.5px 0px 3.5px;
+                }
+              }
+            }
+
+            .NotifInfo {
+              .Summary {
+                font-size: 14px;
+                font-weight: bolder;
+              }
+
+              .Body { font-size: 11px; }
+            }
+
+            .ActionsBox button {
+              background-color: $contrast1;
+              padding: 4px 0px;
+              &.First {
+                border-top-left-radius: 7px;
+                border-bottom-left-radius: 7px;
+              }
+              &.End {
+                border-top-right-radius: 7px;
+                border-bottom-right-radius: 7px;
+              }
+            }
+          }
+        }
+      }
+
+      .Footer button.ClearAllButton {
+        background-color: $contrast1;
+        border-radius: 10px;
+        padding: 7px 10px;
+        font-size: 14px;
+        transition: all ease .2s;
+        &:hover { background-color: $contrast2; }
       }
     }
   }
