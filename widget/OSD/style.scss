@@ -1,0 +1,34 @@
+@use 'sass:color';
+@use '../../theme.scss' as *;
+
+window.OSD {
+  color: $foreground;
+  font-family: $font-regular;
+  font-weight: 500;
+
+  box.OSD {
+    background: $background;
+    border-radius: 100px;
+    padding: 13px 16px;
+    margin: 13px;
+    box-shadow: 3px 3px 7px 0 rgba(0, 0, 0, .4);
+
+    &.Hidden { background: transparent; }
+
+    label {
+      font-size: 12px;
+    }
+
+    levelbar {
+      block {
+        min-height: 4px;
+        margin: 0px 12px;
+        background: $contrast1;
+        border-radius: 100px;
+        &.filled {
+          background-color: $white;
+        }
+      }
+    }
+  }
+}
