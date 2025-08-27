@@ -1,6 +1,7 @@
 @use "./widget/Bar/style.scss" as bar;
 @use "./widget/Dashboard/style.scss" as dashboard;
 @use "./widget/OSD/style.scss" as osd;
+@use "./widget/Notifications/style.scss" as notifications;
 
 * {
   all: unset;

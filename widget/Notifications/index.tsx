@@ -1,11 +1,17 @@
-import { Gtk } from "ags/gtk4";
-import { createBinding, createComputed, createState, For } from "gnim";
+import app from "ags/gtk4/app";
+import { Gtk, Gdk, Astal } from "ags/gtk4";
+import { createState, For, Node, With } from "gnim";
 
 import Notifd from "gi://AstalNotifd";
-import { clamp, maxLength } from "../../utils";
-import { S_PER_MS } from "../../constants";
 
-const notifd = Notifd.get_default();
+import { S_PER_MS } from "../../constants";
+import { timeout } from "ags/time";
+import { clamp, maxLength } from "../../utils";
+
+type NotifProps = {
+  notif: Notifd.Notification,
+  remove(id: number): void;
+};
 
 function NotifFallbackIcon() {
   return (
@@ -20,7 +26,7 @@ function NotifFallbackIcon() {
   );
 }
 
-function NotifItem({ notif: n }: { notif: Notifd.Notification }) {
+function Notification({ notif: n, remove }: NotifProps) {
   const inhomeIcons = {
     "spotify": "\uf1bc", // nerd font
     "discord": "\uf1ff", // nerd font
@@ -34,11 +40,17 @@ function NotifItem({ notif: n }: { notif: Notifd.Notification }) {
     return "";
   }
 
+  const handleSetup = (_self: Gtk.Box) => timeout(5 * S_PER_MS, () => {
+    remove(n.id);
+  });
+
   return (
     <box
+      widthRequest={330}
       hexpand
       orientation={Gtk.Orientation.VERTICAL}
       class="NotificationItem"
+      $={handleSetup}
     >
       <box
         class="Header"
@@ -145,57 +157,67 @@ function NotifItem({ notif: n }: { notif: Notifd.Notification }) {
   );
 }
 
-export default function Notifications() {
-  const notifications = createBinding(notifd, "notifications");
+export default function Notifications(gdkmonitor: Gdk.Monitor) {
+  const notifd = Notifd.get_default();
+  const { TOP, RIGHT } = Astal.WindowAnchor;
+  const [notifications, setNotifications] = createState<Array<NotifProps>>([]);
+  const [visible, setVisible] = createState(true);
+  const map = new Map<number, NotifProps>();
+
+  const rerender = () => setNotifications([...map.values()].reverse());
+
+  const set = (key: number, value: NotifProps) => {
+    map.set(key, value);
+    rerender();
+  }
+
+  const remove = (key: number) => {
+    map.delete(key);
+    rerender();
+  }
+
+  notifd.connect("notified", (_, id) => set(id, {
+    notif: notifd.get_notification(id),
+    remove,
+  }));
+
+  notifd.connect("resolved", (_, id) => {
+    remove(id);
+  });
+
+  notifications.subscribe(() => {
+    setVisible(notifications.get().length > 0);
+  });
+
+  // visible is a terrible hack for some reason gtk won't stop
+  // showing after the last notification were closed if i used visible={visible}
+  visible.subscribe(() => {
+    app.toggle_window("NotificationsPopup");
+  });
 
   return (
-    <box hexpand vexpand class="Right" widthRequest={400}>
-      <centerbox
+    <window
+      visible
+      name="NotificationsPopup"
+      class="NotificationsPopup"
+      exclusivity={Astal.Exclusivity.NORMAL}
+      gdkmonitor={gdkmonitor}
+      anchor={TOP | RIGHT}
+      application={app}
+      marginRight={12}
+      marginTop={12}
+    >
+      <box
         vexpand
         hexpand
+        class="Container"
         orientation={Gtk.Orientation.VERTICAL}
+        spacing={12}
       >
-        <box $type="start" class="Header">
-          <label
-            vexpand
-            hexpand
-            halign={Gtk.Align.START}
-            valign={Gtk.Align.CENTER}
-            label="Notifications"
-          />
-        </box>
-        <box
-          $type="center"
-          vexpand
-          class="Content"
-        >
-          {/* TODO: Maybe scrollbar would be good visual indicator */}
-          <scrolledwindow vexpand hexpand vscrollbarPolicy={Gtk.PolicyType.ALWAYS}>
-            <box
-              vexpand
-              hexpand
-              orientation={Gtk.Orientation.VERTICAL}
-              homogeneous={false}
-              spacing={12}
-            >
-              <For each={notifications}>
-                {(notif) => <NotifItem notif={notif} />}
-              </For>
-            </box>
-          </scrolledwindow>
-        </box>
-        <box $type="end" class="Footer">
-          <button
-            vexpand
-            hexpand
-            halign={Gtk.Align.END}
-            valign={Gtk.Align.CENTER}
-            class="ClearAllButton"
-            label="Clear All"
-            onClicked={() => notifications.get().forEach(n => n.dismiss())}
-          />
-        </box>
-      </centerbox>
-    </box>
+        <For each={notifications}>
+          {(args) => <Notification {...args} />}
+        </For>
+      </box>
+    </window>
   );
 }

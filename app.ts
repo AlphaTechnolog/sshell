@@ -3,6 +3,7 @@ import style from "./style.scss"
 import Bar from "./widget/Bar"
 import Dashboard from "./widget/Dashboard";
 import OSD from "./widget/OSD";
+import Notifications from "./widget/Notifications";
 
 app.start({
   css: style,
@@ -11,6 +12,7 @@ app.start({
       Bar(mon);
       Dashboard(mon);
       OSD(mon);
+      Notifications(mon);
     });
   },
 })

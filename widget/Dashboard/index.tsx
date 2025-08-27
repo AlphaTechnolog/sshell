@@ -287,7 +287,6 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
 
   return (
     <window
-      visible
       class="Dashboard"
       name="Dashboard"
       gdkmonitor={gdkmonitor}
