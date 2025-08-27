@@ -84,10 +84,12 @@ window.Dashboard {
           font-size: 18px;
           font-family: $font-icons;
           transition: all ease .2s;
+
           &.LockButton {
-            color: $accent;
-            &:hover { background-color: rgba($accent, 0.15); }
+            color: $blue;
+            &:hover { background-color: rgba($blue, 0.15); }
           }
+
           &.PoweroffButton {
             color: $red;
             &:hover { background-color: rgba($red, 0.15); }
@@ -106,7 +108,10 @@ window.Dashboard {
           font-size: 12px;
         }
 
-        .VolumeSlider {
+        .SliderContainer {
+          label { font-size: 10px; }
+          &.Disabled label { color: $light_black; }
+
           & scale trough {
             all: unset;
             background-color: $contrast2;
@@ -224,14 +229,10 @@ window.Dashboard {
     }
 
     .Right {
-      .Header {
-        padding: 0px 6px;
-
-        label {
-          font-family: $font-regular;
-          font-size: 28px;
-          font-weight: bold;
-        }
+      .Header label {
+        font-family: $font-regular;
+        font-size: 28px;
+        font-weight: bold;
       }
 
       .Content {
@@ -306,11 +307,15 @@ window.Dashboard {
                 background-color: $accent;
                 color: $background;
                 border-radius: 100px;
-                // I want nerd font spotify instead ;-;
-                &.Spotify {
+                &.spotify {
                   font-family: $font-nf;
                   font-size: 14px;
                   padding: 1px 6.5px 0px 3.5px;
+                }
+                &.discord, &.vesktop {
+                  font-family: $font-nf;
+                  font-size: 13px;
+                  padding: 1px 8.45px 0px 3.5px;
                 }
               }
             }
@@ -325,15 +330,25 @@ window.Dashboard {
             }
 
             .ActionsBox button {
+              $radius: 7px;
               background-color: $contrast1;
               padding: 4px 0px;
-              &.First {
-                border-top-left-radius: 7px;
-                border-bottom-left-radius: 7px;
+              transition: all ease .2s;
+
+              &:hover {
+                background-color: $contrast2;
               }
+
+              &.Only { border-radius: $radius; }
+
+              &.First {
+                border-top-left-radius: $radius;
+                border-bottom-left-radius: $radius;
+              }
+
               &.End {
-                border-top-right-radius: 7px;
-                border-bottom-right-radius: 7px;
+                border-top-right-radius: $radius;
+                border-bottom-right-radius: $radius;
               }
             }
           }
@@ -344,7 +359,7 @@ window.Dashboard {
         background-color: $contrast1;
         border-radius: 10px;
         padding: 7px 10px;
-        font-size: 14px;
+        font-size: 12px;
         transition: all ease .2s;
         &:hover { background-color: $contrast2; }
       }

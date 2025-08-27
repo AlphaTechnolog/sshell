@@ -174,7 +174,13 @@ function SliderContainer({ children, ...rest }: Record<string, any> & {
   children: JSX.Element[] | JSX.Element;
 }) {
   return (
-    <box {...rest} orientation={Gtk.Orientation.HORIZONTAL} hexpand spacing={7}>
+    <box
+      class="SliderContainer"
+      orientation={Gtk.Orientation.HORIZONTAL}
+      hexpand
+      spacing={7}
+      {...rest}
+    >
       {children}
     </box>
   );
@@ -190,7 +196,7 @@ function VolumeSlider() {
   }
 
   return (
-    <SliderContainer class="VolumeSlider">
+    <SliderContainer>
       <image iconName={volumeIcon} valign={Gtk.Align.CENTER} />
       <slider
         value={volume}
@@ -200,6 +206,7 @@ function VolumeSlider() {
         hexpand
         valign={Gtk.Align.CENTER}
       />
+      <label label={volume(v => `${Math.floor(v * 100)}%`)} />
     </SliderContainer>
   )
 }
@@ -216,7 +223,7 @@ function BrightnessSlider() {
   }
 
   return (
-    <SliderContainer class="VolumeSlider">
+    <SliderContainer class={available(a => `SliderContainer ${a ? "" : "Disabled"}`)}>
       <image iconName="display-brightness-symbolic" valign={Gtk.Align.CENTER} />
 
       <slider
@@ -228,6 +235,8 @@ function BrightnessSlider() {
         step={available(a => a ? 0.05 : 0)}
         onChangeValue={({ value }) => handleChange(value)}
       />
+
+      <label label={screen(v => `${Math.floor(v * 100)}%`)} />
     </SliderContainer>
   );
 }
@@ -278,6 +287,7 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
 
   return (
     <window
+      visible
       class="Dashboard"
       name="Dashboard"
       gdkmonitor={gdkmonitor}

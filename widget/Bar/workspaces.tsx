@@ -3,7 +3,7 @@ import { Gtk } from "ags/gtk4";
 import Hyprland from "gi://AstalHyprland?version=0.1"
 
 const hyprland = Hyprland.get_default();
-const MIN_WORKSPACES = 6;
+const MAX_WORKSPACES = 6;
 
 function WorkspaceButton({ wsid }: { wsid: number }) {
   const clients = createBinding(hyprland, "clients");
@@ -35,17 +35,43 @@ function WorkspaceButton({ wsid }: { wsid: number }) {
     focusedWorkspace.subscribe(() => updateButtonState(self));
   }
 
+  function handleClicked() {
+    hyprland.dispatch("workspace", String(wsid));
+  }
+
   return (
-    <button $={setup} onClicked={() => hyprland.dispatch("workspace", String(wsid))}>
+    <button $={setup} onClicked={handleClicked}>
       {String(wsid)}
     </button>
   );
 }
 
-export default function Workspaces(args: { $type: string }) {
+export default function Workspaces(args: Record<string, any>) {
+  const focusedWorkspace = createBinding(hyprland, "focusedWorkspace");
+
+  const scroller = new Gtk.EventControllerScroll({
+    flags: Gtk.EventControllerScrollFlags.VERTICAL,
+  });
+
+  const setup = (self: Gtk.Box) => {
+    self.add_controller(scroller);
+  }
+
+  scroller.connect("scroll", (_self, _dx, dy) => {
+    const wsid = focusedWorkspace.get().id;
+    let param = dy > 0 ? "+1" : "-1";
+    if (wsid + dy > MAX_WORKSPACES) {
+      param = String(1);
+    } else if (dy < 0 && wsid == 1) {
+      param = String(MAX_WORKSPACES);
+    }
+
+    hyprland.dispatch("workspace", param);
+  });
+
   return (
-    <box {...args} class="WorkspacesContainer" spacing={4}>
-      {Array.from({ length: MIN_WORKSPACES }, (_, i: number) => i + 1).map((wsid: number) => (
+    <box {...args} class="WorkspacesContainer" spacing={4} $={setup}>
+      {Array.from({ length: MAX_WORKSPACES }, (_, i: number) => i + 1).map((wsid: number) => (
         <WorkspaceButton wsid={wsid} />
       ))}
     </box>

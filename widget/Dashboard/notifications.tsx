@@ -2,7 +2,7 @@ import { Gtk } from "ags/gtk4";
 import { createBinding, createComputed, createState, For } from "gnim";
 
 import Notifd from "gi://AstalNotifd";
-import { clamp } from "../../utils";
+import { clamp, maxLength } from "../../utils";
 
 const notifd = Notifd.get_default();
 
@@ -21,10 +21,13 @@ function NotifFallbackIcon() {
 
 function NotifItem({ notif: n }: { notif: Notifd.Notification }) {
   const inhomeIcons = {
-    "Spotify": "\uf1bc",
+    "spotify": "\uf1bc", // nerd font
+    "discord": "\uf1ff", // nerd font
+    "vesktop": "\uf1ff", // nerd font
   };
 
   const injectActionClasses = (i: number): string => {
+    if (n.actions.length === 1) return "Only";
     if (i === 0) return "First";
     if (i === n.actions.length - 1) return "End";
     return "";
@@ -78,14 +81,14 @@ function NotifItem({ notif: n }: { notif: Notifd.Notification }) {
               <overlay hexpand={false} vexpand={false}>
                 <box
                   css={`background-image: url("file://${n.image}");`}
-                  class={`NotifImage ${n.appName in inhomeIcons ? "GoodBorder" : "SubtleBorder"}`}
+                  class={`NotifImage ${n.appName.toLowerCase() in inhomeIcons ? "GoodBorder" : "SubtleBorder"}`}
                   widthRequest={54}
                   heightRequest={54}
                 />
-                {n.appName in inhomeIcons && (
+                {n.appName.toLowerCase() in inhomeIcons && (
                   <label
-                    label={inhomeIcons[n.appName as keyof typeof inhomeIcons]}
-                    class={`InhomeIcon ${n.appName}`}
+                    label={inhomeIcons[n.appName.toLowerCase() as keyof typeof inhomeIcons]}
+                    class={`InhomeIcon ${n.appName.toLowerCase()}`}
                     $type="overlay"
                     halign={Gtk.Align.END}
                     valign={Gtk.Align.END}
@@ -102,7 +105,7 @@ function NotifItem({ notif: n }: { notif: Notifd.Notification }) {
             class="NotifInfo"
           >
             <label
-              label={n.summary}
+              label={maxLength(n.summary, 40)}
               class="Summary"
               hexpand
               halign={Gtk.Align.START}
