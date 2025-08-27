@@ -1,8 +1,9 @@
 import { Gtk } from "ags/gtk4";
-import { exec } from "ags/process";
+import { execAsync } from "ags/process";
 import { Accessor, createBinding, createComputed, createState, With } from "gnim";
 
 import Mpris from "gi://AstalMpris";
+import { maxLength } from "../../utils";
 
 const spotify = Mpris.Player.new("spotify");
 
@@ -111,10 +112,14 @@ function CardContent({ blurredArt }: { blurredArt: Accessor<string> }) {
             orientation={Gtk.Orientation.VERTICAL}
             spacing={4}
           >
-            <label halign={Gtk.Align.START} label={trackTitle} class="Title" />
             <label
               halign={Gtk.Align.START}
-              label={trackArtist}
+              label={trackTitle(t => maxLength(t, 35))}
+              class="Title"
+            />
+            <label
+              halign={Gtk.Align.START}
+              label={trackArtist(a => maxLength(a, 35))}
               class="Artist"
               visible={trackArtist(a => a.length > 0)}
             />
@@ -198,15 +203,15 @@ export default function MusicPlayer() {
   };
 
   // FIXME: Make this work without imagemagick (just keep default image, will look ugly but will not crash.)
-  const updateBlurredArt = (image: string) => {
-    const exists = exec(`/usr/bin/env bash -c 'test -f ${image} && echo yes || echo no'`) === "yes";
+  const updateBlurredArt = async (image: string) => {
+    const exists = await execAsync(`/usr/bin/env bash -c 'test -f ${image} && echo yes || echo no'`) === "yes";
     if (!exists) return "";
 
     const splitted = image.split("/");
     const dirname = splitted.slice(0, -1).join("/");
     const filename = splitted[splitted.length - 1] + ".blurred.png";
 
-    const [width, height] = exec(`magick identify -format "%wx%h" ${image}`).split("x");
+    const [width, height] = (await execAsync(`magick identify -format "%wx%h" ${image}`)).split("x");
 
     const cmd = `magick convert "${image}" \
       -blur 0x5 \
@@ -215,7 +220,7 @@ export default function MusicPlayer() {
       "${dirname}/${filename}"`;
 
     try {
-      exec(cmd);
+      await execAsync(cmd);
       setBlurredArt(`${dirname}/${filename}`);
     } catch (err) {
       console.log({ err });

@@ -1,11 +1,15 @@
-import { Astal, Gdk, Gtk } from "ags/gtk4";
 import app from "ags/gtk4/app";
-import { createBinding } from "gnim";
+import GLib from "gi://GLib?version=2.0";
+import { Astal, Gdk, Gtk } from "ags/gtk4";
+import { createBinding, createState, With } from "gnim";
 import { createPoll } from "ags/time";
+import { fileExists } from "../../utils/fs";
 import { S_PER_MS } from "../../constants";
 
 import Wp from "gi://AstalWp";
 import MusicPlayer from "./music-player";
+import { Brightness, Uptime } from "../../services/";
+import { capitalize } from "../../utils";
 
 function Clock() {
   const contents = createPoll("00:00", 1 * S_PER_MS, "date '+%H:%M'")
@@ -21,6 +25,146 @@ function Clock() {
     >
       <label class="Time" label={contents} />
       <label class="Day" label={day} />
+    </box>
+  );
+}
+
+function UserContainer() {
+  const uptime = Uptime.get_default();
+  const fmttedUptime = createBinding(uptime, "formatted");
+  const whoami = GLib.getenv("USER") ?? "nobody";
+  const [faceUrl, setFaceUrl] = createState<string | undefined>(undefined);
+
+  // FIXME: We could extract this to a service
+  async function getData() {
+    const home = GLib.getenv("HOME") ?? "/home/" + whoami;
+    const pfpPath = `${home}/.face`;
+    for (const x of [".png", ".jpg"]) {
+      const v = pfpPath.concat(x);
+      if (await fileExists(v)) {
+        setFaceUrl(v);
+        break;
+      }
+    }
+  }
+
+  getData();
+
+  // TODO
+  function handleLockPC() {
+    console.log("handleLockPC");
+  }
+
+  // TODO
+  function handlePoweroffPC() {
+    console.log("handlePoweroffPC");
+  }
+
+  return (
+    <box
+      class="UserContainer"
+      orientation={Gtk.Orientation.VERTICAL}
+      spacing={4}
+    >
+      <box
+        class="ContentInformation"
+        orientation={Gtk.Orientation.HORIZONTAL}
+        spacing={12}
+        vexpand
+      >
+        <box class="ImageContainer" halign={Gtk.Align.START}>
+          <overlay hexpand={false} vexpand={false}>
+            <With value={faceUrl}>
+              {(value) => value ? (
+                <box
+                  css={faceUrl(u => `background-image: url('file://${u!}')`)}
+                  class="UserPfp"
+                  widthRequest={64}
+                  heightRequest={64}
+                  hexpand
+                  halign={Gtk.Align.CENTER}
+                />
+              ) : (
+                <box
+                  class="UserPfpFallback"
+                  widthRequest={64}
+                  heightRequest={64}
+                  hexpand
+                  halign={Gtk.Align.CENTER}
+                >
+                  <label
+                    hexpand
+                    vexpand
+                    halign={Gtk.Align.CENTER}
+                    valign={Gtk.Align.CENTER}
+                    label={"\uE4D6"}
+                  />
+                </box>
+              )}
+            </With>
+            <label
+              $type="overlay"
+              class="ContentOverlay"
+              label={"\uE4C2"}
+              hexpand
+              vexpand
+              valign={Gtk.Align.END}
+              halign={Gtk.Align.END}
+            />
+          </overlay>
+        </box>
+        <box
+          hexpand
+          vexpand
+          valign={Gtk.Align.CENTER}
+          class="ContentContainer"
+          orientation={Gtk.Orientation.VERTICAL}
+          spacing={2}
+        >
+          <label
+            label={`Hi ${capitalize(whoami)}`}
+            hexpand
+            halign={Gtk.Align.START}
+            class="Whoami"
+          />
+          <label
+            label={fmttedUptime(s => `Up ${s}`)}
+            hexpand
+            halign={Gtk.Align.START}
+            class="Uptime"
+          />
+        </box>
+      </box>
+      <box
+        hexpand
+        vexpand
+        valign={Gtk.Align.END}
+        halign={Gtk.Align.END}
+        orientation={Gtk.Orientation.HORIZONTAL}
+        spacing={7}
+        class="SystemActionButtons"
+      >
+        <button
+          class="SystemActionButton LockButton"
+          onClicked={handleLockPC}
+          vexpand
+          hexpand
+          halign={Gtk.Align.CENTER}
+          valign={Gtk.Align.CENTER}
+        >
+          <label label={"\uE308"} />
+        </button>
+        <button
+          class="SystemActionButton PoweroffButton"
+          onClicked={handlePoweroffPC}
+          vexpand
+          hexpand
+          halign={Gtk.Align.CENTER}
+          valign={Gtk.Align.CENTER}
+        >
+          <label label={"\uE3DA"} />
+        </button>
+      </box>
     </box>
   );
 }
@@ -59,19 +203,29 @@ function VolumeSlider() {
   )
 }
 
-// FIXME: Disabled since i need hardware to test brightness control such as a laptop.
+// FIXME: Needs testing on device with brightness support.
 function BrightnessSlider() {
+  const brightness = Brightness.get_default();
+  const available = createBinding(brightness, "available");
+  const screen = createBinding(brightness, "screen");
+
+  function handleChange(value: number) {
+    if (brightness.available === false) return;
+    brightness.screen = value;
+  }
+
   return (
     <SliderContainer class="VolumeSlider">
       <image iconName="display-brightness-symbolic" valign={Gtk.Align.CENTER} />
 
       <slider
-        value={0}
+        value={screen}
         min={0}
-        max={0}
+        max={available(a => Number(a))} // will disable if not available
         hexpand
         valign={Gtk.Align.CENTER}
-        step={0} // effectively disables slider
+        step={available(a => a ? 0.05 : 0)}
+        onChangeValue={({ value }) => handleChange(value)}
       />
     </SliderContainer>
   );
@@ -105,6 +259,7 @@ function MainInformation() {
       spacing={7}
     >
       <Clock />
+      <UserContainer />
       <Sliders />
       <MusicPlayer />
     </box>
@@ -129,12 +284,13 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
       anchor={TOP}
       marginTop={7}
       application={app}
+      visible
     >
       <box class="MainContent" orientation={Gtk.Orientation.HORIZONTAL}>
         <MainInformation />
         {/* TODO: Notifications Panel */}
         {/* <Separator /> */}
-        {/* <box hexpand vexpand class="Right"> */}
+        {/* <box hexpand vexpand class="Right" widthRequest={400}> */}
         {/*   <label */}
         {/*     hexpand */}
         {/*     halign={Gtk.Align.CENTER} */}
