@@ -7,7 +7,8 @@ window.OSD {
   font-weight: 500;
 
   box.OSD {
-    background: $background;
+    background: $solid-bg;
+    border: solid 1px color.adjust($color: $solid-bg, $lightness: 4%);
     border-radius: 100px;
     padding: 13px 16px;
     margin: 13px;

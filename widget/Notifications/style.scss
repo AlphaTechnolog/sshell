@@ -12,7 +12,8 @@ window.NotificationsPopup {
     }
 
     .NotificationItem {
-      background-color: $contrast1;
+      background-color: $solid-bg;
+      border: solid 1px color.adjust($color: $solid-bg, $lightness: 7%);
       border-radius: 12px;
 
       .Header {
