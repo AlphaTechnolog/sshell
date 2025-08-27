@@ -238,10 +238,20 @@ window.Dashboard {
       .Content {
         padding: 12px 0px;
 
-        // TODO: Remove
-        label {
-          font-size: 13px;
-          font-weight: 500;
+        .NoNotificationsContainer {
+          label.Icon {
+            font-family: $font-nf;
+            font-size: 100px;
+            font-weight: bold;
+            color: $accent;
+            padding-right: 35px;
+          }
+
+          label.Title {
+            font-size: 22px;
+            color: $light_black;
+            margin-bottom: 12px;
+          }
         }
 
         .NotificationItem {

@@ -1,5 +1,5 @@
 import { Gtk } from "ags/gtk4";
-import { createBinding, createComputed, createState, For } from "gnim";
+import { createBinding, createComputed, createState, For, With } from "gnim";
 
 import Notifd from "gi://AstalNotifd";
 import { clamp, maxLength } from "../../utils";
@@ -145,6 +145,32 @@ function NotifItem({ notif: n }: { notif: Notifd.Notification }) {
   );
 }
 
+function NoNotifications() {
+  return (
+    <box
+      vexpand
+      hexpand
+      halign={Gtk.Align.CENTER}
+      valign={Gtk.Align.CENTER}
+      orientation={Gtk.Orientation.VERTICAL}
+      class="NoNotificationsContainer"
+    >
+      <label
+        class="Icon"
+        label={"\uec08"}
+        halign={Gtk.Align.CENTER}
+        valign={Gtk.Align.CENTER}
+      />
+      <label
+        class="Title"
+        label="Nothing here yet" 
+        halign={Gtk.Align.CENTER}
+        valign={Gtk.Align.CENTER}
+      />
+    </box>
+  );
+}
+
 export default function Notifications() {
   const notifications = createBinding(notifd, "notifications");
 
@@ -178,6 +204,9 @@ export default function Notifications() {
               homogeneous={false}
               spacing={12}
             >
+              <With value={notifications}>
+                {(value) => value.length === 0 && <NoNotifications />}
+              </With>
               <For each={notifications}>
                 {(notif) => <NotifItem notif={notif} />}
               </For>

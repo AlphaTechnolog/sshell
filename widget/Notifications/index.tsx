@@ -118,14 +118,14 @@ function Notification({ notif: n, remove }: NotifProps) {
             class="NotifInfo"
           >
             <label
-              label={maxLength(n.summary, 40)}
+              label={maxLength(n.summary, 30)}
               class="Summary"
               hexpand
               halign={Gtk.Align.START}
             />
             {n.summary !== n.body && n.body.length > 0 && (
               <label
-                label={n.body}
+                label={maxLength(n.body, 40)}
                 class="Body"
                 hexpand
                 halign={Gtk.Align.START}
@@ -190,7 +190,7 @@ export default function Notifications(gdkmonitor: Gdk.Monitor) {
   });
 
   // visible is a terrible hack for some reason gtk won't stop
-  // showing after the last notification were closed if i used visible={visible}
+  // showing after the last notification gets closed if i use visible={visible}
   visible.subscribe(() => {
     app.toggle_window("NotificationsPopup");
   });
