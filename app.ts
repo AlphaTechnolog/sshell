@@ -5,6 +5,8 @@ import Dashboard from "./widget/Dashboard";
 import OSD from "./widget/OSD";
 import Notifications from "./widget/Notifications";
 
+import { Dnd as _ } from "./services";
+
 app.start({
   css: style,
   main() {

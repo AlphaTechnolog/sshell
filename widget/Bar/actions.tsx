@@ -1,11 +1,14 @@
-import { createBinding, createComputed, createState } from "gnim";
+import { createBinding, createComputed } from "gnim";
 import { Gtk } from "ags/gtk4";
-import MusicIndicator from "./music-indicator";
 
 import Network from "gi://AstalNetwork";
 import Wp from "gi://AstalWp";
+import { Dnd } from "../../services";
+
 import { exec } from "ags/process";
 import { clamp } from "../../utils/math";
+
+import MusicIndicator from "./music-indicator";
 
 const network = Network.get_default();
 const wp = Wp.get_default();
@@ -42,6 +45,18 @@ export function VolumeIcon() {
   );
 }
 
+export function MoonIcon() {
+  const dnd = Dnd.get_default();
+  const enabled = createBinding(dnd, "enabled");
+
+  return (
+    <image
+      iconName="notifications-disabled-symbolic"
+      visible={enabled}
+    />
+  );
+}
+
 export default function Actions(args: { $type: string; }) {
   return (
     <box {...args} spacing={6} class="Actions">
@@ -50,6 +65,7 @@ export default function Actions(args: { $type: string; }) {
         <box spacing={10}>
           <NetworkIcon />
           <VolumeIcon />
+          <MoonIcon />
         </box>
       </button>
       <button

@@ -1,8 +1,9 @@
 import app from "ags/gtk4/app";
 import { Gtk, Gdk, Astal } from "ags/gtk4";
-import { createState, For, Node, With } from "gnim";
+import { createBinding, createState, For, Node } from "gnim";
 
 import Notifd from "gi://AstalNotifd";
+import { Dnd } from "../../services";
 
 import { S_PER_MS } from "../../constants";
 import { timeout } from "ags/time";
@@ -160,6 +161,10 @@ function Notification({ notif: n, remove }: NotifProps) {
 export default function Notifications(gdkmonitor: Gdk.Monitor) {
   const notifd = Notifd.get_default();
   const { TOP, RIGHT } = Astal.WindowAnchor;
+
+  const dnd = Dnd.get_default();
+  const enabledDnd = createBinding(dnd, "enabled");
+
   const [notifications, setNotifications] = createState<Array<NotifProps>>([]);
   const [visible, setVisible] = createState(true);
   const map = new Map<number, NotifProps>();
@@ -176,12 +181,17 @@ export default function Notifications(gdkmonitor: Gdk.Monitor) {
     rerender();
   }
 
-  notifd.connect("notified", (_, id) => set(id, {
-    notif: notifd.get_notification(id),
-    remove,
-  }));
+  notifd.connect("notified", (_, id) => {
+    if (!enabledDnd.get()) {
+      set(id, {
+        notif: notifd.get_notification(id),
+        remove,
+      });
+    }
+  })
 
   notifd.connect("resolved", (_, id) => {
+    if (enabledDnd.get()) return;  // avoid unnecessary rerenders.
     remove(id);
   });
 
