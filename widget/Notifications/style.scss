@@ -103,6 +103,7 @@ window.NotificationsPopup {
           background-color: $contrast1;
           padding: 4px 0px;
           transition: all ease .2s;
+          font-size: 12px;
 
           &:hover {
             background-color: $contrast2;

@@ -78,7 +78,7 @@ function Notification({ notif: n, remove }: NotifProps) {
         hexpand
         class="Content"
         orientation={Gtk.Orientation.VERTICAL}
-        spacing={8}
+        spacing={12}
       >
         <box
           hexpand

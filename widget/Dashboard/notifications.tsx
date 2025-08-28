@@ -65,7 +65,7 @@ function NotifItem({ notif: n }: { notif: Notifd.Notification }) {
         hexpand
         class="Content"
         orientation={Gtk.Orientation.VERTICAL}
-        spacing={8}
+        spacing={12}
       >
         <box
           hexpand

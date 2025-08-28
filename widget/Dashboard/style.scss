@@ -42,6 +42,11 @@ window.Dashboard {
           .ImageContainer {
             .UserPfp {
               border-radius: 100px;
+              border: solid 2px $black;
+            }
+
+            .UserPfp {
+              border-radius: 100px;
               background-size: cover;
               background-position: center;
               background-repeat: no-repeat;
@@ -58,8 +63,9 @@ window.Dashboard {
             .ContentOverlay {
               padding: 4px;
               border-radius: 100px;
-              background-color: $foreground;
-              color: $background;
+              background-color: $black;
+              color: $accent;
+              font-weight: bold;
               font-size: 12px;
               font-family: $font-icons;
             }
@@ -341,9 +347,11 @@ window.Dashboard {
 
             .ActionsBox button {
               $radius: 7px;
+
               background-color: $contrast1;
-              padding: 4px 0px;
+              padding: 6px 0px;
               transition: all ease .2s;
+              font-size: 12px;
 
               &:hover {
                 background-color: $contrast2;
