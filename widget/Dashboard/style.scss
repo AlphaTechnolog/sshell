@@ -255,7 +255,7 @@ window.Dashboard {
 
           label.Title {
             font-size: 22px;
-            color: $light_black;
+            color: color.mix($accent, $light_black, 25%);
             margin-bottom: 12px;
           }
         }

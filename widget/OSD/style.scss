@@ -7,12 +7,9 @@ window.OSD {
   font-weight: 500;
 
   box.OSD {
-    background: $solid-bg;
-    border: solid 1px color.adjust($color: $solid-bg, $lightness: 4%);
+    background: color.mix($background, $solid-bg, 50%);  // more darker than usual
     border-radius: 100px;
     padding: 13px 16px;
-    margin: 13px;
-    box-shadow: 3px 3px 7px 0 rgba(0, 0, 0, .4);
 
     &.Hidden { background: transparent; }
 
@@ -27,7 +24,7 @@ window.OSD {
         background: $contrast1;
         border-radius: 100px;
         &.filled {
-          background-color: $white;
+          background-color: $tinted-white;
         }
       }
     }

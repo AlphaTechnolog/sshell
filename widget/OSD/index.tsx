@@ -87,6 +87,7 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       anchor={Astal.WindowAnchor.BOTTOM}
       application={app}
       visible
+      marginBottom={5}
     >
       <box vexpand hexpand $={self => self.add_controller(eventMotion)}>
         <OnScreenProgress visible={visible} setVisible={setVisible} />
