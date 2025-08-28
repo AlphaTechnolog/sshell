@@ -51,7 +51,7 @@ window.NotificationsPopup {
           font-size: 24px;
           font-weight: bolder;
           background: linear-gradient(to bottom right, $background, color.adjust($background, $lightness: 8%));
-          color: $white;
+          color: $tinted-white;
           border: solid 2px $black;
           border-radius: 100px;
         }

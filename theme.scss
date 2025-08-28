@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $background: #000000;
 $solid-bg: #0f0f0f;  // used for solid surfaces
 $foreground: #cdcdcd;
@@ -26,4 +28,6 @@ $font-regular: Inter;
 $font-icons: Phosphor;
 $font-nf: JetBrainsMono Nerd Font;
 
-$accent: $blue;
+$accent: $magenta;
+$tinted-white: color.mix($accent, $white, 50%);
+$tinted-white-2: color.mix($accent, $white, 75%);
