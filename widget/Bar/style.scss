@@ -46,9 +46,14 @@ window.Bar {
         padding: 4px 16px;
         border-radius: 100px;
 
-        &:hover {
-          background-color: $contrast2;
+        .PhosphorIcon {
+          font-family: $font-icons;
+          font-weight: 600;
+          font-size: 18px;
         }
+
+        &:hover { background-color: $contrast2; }
+        .DndIcon { color: $accent2; }
       }
 
       .Poweroff {

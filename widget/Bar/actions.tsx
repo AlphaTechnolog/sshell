@@ -2,7 +2,6 @@ import app from "ags/gtk4/app";
 import { createBinding, createComputed, createState } from "gnim";
 import { Gtk } from "ags/gtk4";
 
-import Network from "gi://AstalNetwork";
 import Wp from "gi://AstalWp";
 import { Dnd } from "../../services";
 
@@ -10,21 +9,19 @@ import { exec } from "ags/process";
 import { clamp } from "../../utils/math";
 
 import MusicIndicator from "./music-indicator";
+import { useNetworkIcon } from "../../hooks";
 
-const network = Network.get_default();
 const wp = Wp.get_default();
 
 // FIXME: I need to try this out in a system with wifi support
 export function NetworkIcon() {
-  const { UNMANAGED, FAILED, DISCONNECTED } = Network.DeviceState;
-
-  const wiredIcon = createComputed([
-    createBinding(network.wired, "iconName"),
-    createBinding(network.wired, "state"),
-  ], (icon, state) => [UNMANAGED, FAILED, DISCONNECTED].includes(state) ? "network-offline" : icon);
+  const { icon } = useNetworkIcon();
 
   return (
-    <image iconName={wiredIcon} />
+    <label
+      label={icon}
+      class="PhosphorIcon"
+    />
   );
 }
 
@@ -46,14 +43,15 @@ export function VolumeIcon() {
   );
 }
 
-export function MoonIcon() {
+export function DndIcon() {
   const dnd = Dnd.get_default();
   const enabled = createBinding(dnd, "enabled");
 
   return (
-    <image
-      iconName="notifications-disabled-symbolic"
+    <label
+      label={"\uE330"}
       visible={enabled}
+      class="PhosphorIcon DndIcon"
     />
   );
 }
@@ -76,7 +74,7 @@ export default function Actions(args: { $type: string; }) {
         <box spacing={10}>
           <NetworkIcon />
           <VolumeIcon />
-          <MoonIcon />
+          <DndIcon />
         </box>
       </button>
       <button

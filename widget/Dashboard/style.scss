@@ -53,7 +53,7 @@ window.Dashboard {
 
             .UserPfpFallback {
               background: $background;
-              color: $tinted-white;
+              color: $white;
               border-radius: 100px;
               font-size: 32px;
               font-family: $font-icons;
@@ -90,15 +90,17 @@ window.Dashboard {
           font-family: $font-icons;
           transition: all ease .2s;
 
-          &.LockButton {
-            color: $blue;
-            &:hover { background-color: rgba($blue, 0.15); }
+          $opacity: 0.15;
+          @mixin beautiful-hover($classname, $color) {
+            &.#{$classname} {
+              color: $color;
+              &:hover { background-color: rgba($color, $opacity); }
+            }
           }
 
-          &.PoweroffButton {
-            color: $red;
-            &:hover { background-color: rgba($red, 0.15); }
-          }
+          &:hover { border-radius: 12px; }
+          @include beautiful-hover("LockButton", $blue);
+          @include beautiful-hover("PoweroffButton", $red);
         }
       }
 
@@ -115,7 +117,7 @@ window.Dashboard {
 
         .SliderContainer {
           label { font-size: 10px; }
-          &.Disabled label { color: $light_black; }
+          &.Disabled label { color: $contrastfg; }
 
           & scale trough {
             all: unset;
@@ -177,16 +179,17 @@ window.Dashboard {
             .PlayPauseButton {
               font-family: $font-icons;
               font-size: 18px;
-              border-radius: 100px;
+              border-radius: 18px;
               padding: 10px 11px 10px 9px;
-              background-color: $tinted-white;
+              background-color: $white;
               color: $black;
-              transition-property: background-color;
+              transition-property: background-color, border-radius;
               transition-duration: .25s;
               transition-timing-function: ease;
 
               &.Playing {
                 padding: 10px;
+                border-radius: 12px;
               }
 
               &:hover {
@@ -206,7 +209,7 @@ window.Dashboard {
               & highlight {
                 all: unset;
                 border-radius: 100px;
-                background-color: $tinted-white;
+                background-color: $white;
               }
             }
 

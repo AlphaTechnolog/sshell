@@ -106,7 +106,7 @@ function NotifItem({ notif: n }: { notif: Notifd.Notification }) {
             class="NotifInfo"
           >
             <label
-              label={maxLength(n.summary, 40)}
+              label={maxLength(n.summary, 35)}
               class="Summary"
               hexpand
               halign={Gtk.Align.START}

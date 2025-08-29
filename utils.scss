@@ -1,0 +1,45 @@
+@use "sass:math";
+@use "sass:color";
+
+@function red($color) { @return color.channel($color, "red", rgb); }
+@function green($color) { @return color.channel($color, "green", rgb); }
+@function blue($color) { @return color.channel($color, "blue", rgb); }
+
+@function to-linear($value) {
+  $value: calc($value / 255);
+  @if $value <= 0.03928 {
+    @return $value / 12.92;
+  } @else {
+    @return math.pow(calc(($value + 0.055) / 1.055), 2.4);
+  }
+}
+
+@function luminance($color) {
+  $r: to-linear(red($color));
+  $g: to-linear(green($color));
+  $b: to-linear(blue($color));
+  @return calc((0.2126 * $r) + (0.7152 * $g) + (0.0722 * $b));
+}
+
+@function contrast-ratio($color1, $color2) {
+  $lum1: luminance($color1);
+  $lum2: luminance($color2);
+  @if $lum1 > $lum2 {
+    @return calc(($lum1 + 0.05) / ($lum2 + 0.05));
+  } @else {
+    @return calc(($lum2 + 0.05) / ($lum1 + 0.05));
+  }
+}
+
+@mixin set-scheme($bg, $fg, $fallback-fg) {
+  $min-ratio: 4.5;
+  $ratio: contrast-ratio($bg, $fg);
+
+  background-color: $bg;
+
+  @if $ratio < $min-ratio {
+    color: $fallback-fg;
+  } @else {
+    color: $fg;
+  }
+}

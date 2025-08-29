@@ -1,4 +1,5 @@
 @use 'sass:color';
+@use '../../utils.scss';
 @use '../../theme.scss' as *;
 
 window.ControlCenter {
@@ -12,5 +13,112 @@ window.ControlCenter {
     background: rgba($background, $general-opacity);
     border-radius: 12px;
     padding: 12px;
+
+    .Header {
+      .Pfp {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        border-radius: 100px;
+      }
+
+      .LogoutButton {
+        background-color: $contrast1;
+        border-radius: 100px;
+        padding: 7px 14px;
+        transition: all ease .2s;
+        font-size: 13px;
+        &:hover { background-color: $contrast2; }
+      }
+
+      .PoweroffButton, .LockButton {
+        background-color: $contrast1;
+        border-radius: 10px;
+        font-size: 18px;
+        font-family: $font-icons;
+        transition: all ease .2s;
+        padding: 6px;
+
+        &:hover { border-radius: 12px; }
+
+        $hover-opacity: 0.15;
+
+        @mixin beautiful-hover($classname, $color) {
+          &.#{$classname} {
+            color: $color;
+            &:hover { background-color: rgba($color, $hover-opacity); }
+          }
+        }
+
+        @include beautiful-hover("LockButton", $blue);
+        @include beautiful-hover("PoweroffButton", $red);
+      }
+
+      .CloseButton {
+        font-family: $font-icons;
+        font-size: 16px;
+        padding: 4px;
+        border-radius: 100px;
+        transition: background-color ease .2s;
+        &:hover { background-color: $contrast1; }
+      }
+    }
+
+    .BodyContainer .MainView {
+      .Chip {
+        &.Active {
+          button.ToggleIcon .Summary { color: inherit; }
+          button.ToggleIcon, button.ConfigButton {
+            $hover-lightness: 0.15;
+            @include utils.set-scheme($bg: $accent, $fg: $foreground, $fallback-fg: $black);
+            &:hover { background-color: color.adjust($color: $accent, $lightness: 5%); }
+          }
+        }
+
+        button.ToggleIcon {
+          background: $contrast1;
+          font-size: 10px;
+          font-family: $font-regular;
+          padding: 10px 12px;
+          border-radius: 10px;
+          border-top-right-radius: 0px;
+          border-bottom-right-radius: 0px;
+          transition: all ease .4s;
+          &:hover { background-color: $contrast2; }
+
+          &.Only {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+          }
+
+          .Icon {
+            font-family: $font-icons;
+            font-size: 22px;
+          }
+
+          .Title {
+            font-size: 13px;
+            font-weight: 600;
+          }
+
+          .Summary {
+            color: $contrastfg;
+            transition: color ease .4s;
+          }
+        }
+
+        button.ConfigButton {
+          background: $contrast1;
+          font-size: 16px;
+          font-family: $font-icons;
+          padding: 4px 16px;
+          border-radius: 10px;
+          border-top-left-radius: 0px;
+          border-bottom-left-radius: 0px;
+          transition: all ease .2s;
+          &:hover { background-color: $contrast2; }
+        }
+      }
+    }
   }
 }

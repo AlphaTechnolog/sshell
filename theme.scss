@@ -23,11 +23,13 @@ $light_white: #d7d7d7;
 $general-opacity: 0.75;
 $contrast1: rgba(#ffffff, 0.05);
 $contrast2: rgba(#ffffff, 0.1);
+$contrastfg: rgba(#ffffff, 0.35);
 
 $font-regular: Inter;
 $font-icons: Phosphor;
 $font-nf: JetBrainsMono Nerd Font;
 
-$accent: $blue;
+$accent: $magenta;
+$accent2: $cyan;
 $tinted-white: color.mix($accent, $white, 50%);
 $tinted-white-2: color.mix($accent, $white, 75%);
