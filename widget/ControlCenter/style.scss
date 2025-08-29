@@ -22,6 +22,15 @@ window.ControlCenter {
         border-radius: 100px;
       }
 
+      .FallbackPfp {
+        border-radius: 100px;
+        background: $background;
+        color: $white;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: $font-icons;
+      }
+
       .LogoutButton {
         background-color: $contrast1;
         border-radius: 100px;

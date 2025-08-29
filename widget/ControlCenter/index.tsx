@@ -1,6 +1,6 @@
 import app from "ags/gtk4/app";
 import { Astal, Gdk, Gtk } from "ags/gtk4";
-import { type Accessor, createBinding, createComputed } from "gnim";
+import { type Accessor, createBinding, createComputed, With } from "gnim";
 
 import { User } from "../../services";
 import { Body } from "./views";
@@ -26,13 +26,32 @@ function Header() {
         orientation={Gtk.Orientation.HORIZONTAL}
         spacing={10}
       >
-        <box
-          css={pfp(s => `background-image: url("file://${s}");`)}
-          class="Pfp"
-          widthRequest={32}
-          heightRequest={32}
-          valign={Gtk.Align.CENTER}
-        />
+        <With value={hasPfp}>
+          {(value) => value ? (
+            <box
+              css={pfp(s => `background-image: url("file://${s}");`)}
+              class="Pfp"
+              widthRequest={32}
+              heightRequest={32}
+              valign={Gtk.Align.CENTER}
+            />
+          ) : (
+            <box
+              class="FallbackPfp"
+              widthRequest={32}
+              heightRequest={32}
+              valign={Gtk.Align.CENTER}
+            >
+              <label
+                hexpand
+                vexpand
+                halign={Gtk.Align.CENTER}
+                valign={Gtk.Align.CENTER}
+                label={"\uE4D6"}
+              />
+            </box>
+          )}
+        </With>
         <button
           class="LogoutButton"
           label="Sign out"
@@ -80,7 +99,6 @@ export default function ControlCenter(gdkmonitor: Gdk.Monitor) {
       anchor={TOP | RIGHT}
       marginTop={7}
       marginRight={7}
-      visible
     >
       <box
         class="Container"
