@@ -1,4 +1,5 @@
-import { createBinding, createComputed } from "gnim";
+import app from "ags/gtk4/app";
+import { createBinding, createComputed, createState } from "gnim";
 import { Gtk } from "ags/gtk4";
 
 import Network from "gi://AstalNetwork";
@@ -58,10 +59,20 @@ export function MoonIcon() {
 }
 
 export default function Actions(args: { $type: string; }) {
+  const [visibleCC, setVisibleCC] = createState(false);
+
+  const handleClick = () => {
+    const cc = app.get_window("ControlCenter");
+    if (cc) setVisibleCC(cc.visible = !cc.visible);
+  }
+
   return (
     <box {...args} spacing={6} class="Actions">
       <MusicIndicator />
-      <button class="Button">
+      <button
+        class={visibleCC(v => `Button ${v ? "Active" : ""}`)}
+        onClicked={handleClick}
+      >
         <box spacing={10}>
           <NetworkIcon />
           <VolumeIcon />

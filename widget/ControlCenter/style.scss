@@ -1,0 +1,16 @@
+@use 'sass:color';
+@use '../../theme.scss' as *;
+
+window.ControlCenter {
+  background: transparent;
+  color: $foreground;
+  font-family: $font-regular;
+  font-size: 14px;
+  font-weight: 500;
+
+  .Container {
+    background: rgba($background, $general-opacity);
+    border-radius: 12px;
+    padding: 12px;
+  }
+}

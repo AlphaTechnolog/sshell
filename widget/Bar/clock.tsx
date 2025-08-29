@@ -11,10 +11,7 @@ export default function Clock(args: { $type: string; }) {
 
   const handleClick = () => {
     const dashboard = app.get_window("Dashboard");
-    if (dashboard) {
-      setVisibleDashboard(!dashboard.visible);
-      dashboard.visible = !dashboard.visible;
-    }
+    if (dashboard) setVisibleDashboard(dashboard.visible = !dashboard.visible);
   }
 
   return (

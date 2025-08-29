@@ -160,7 +160,7 @@ function Notification({ notif: n, remove }: NotifProps) {
 
 export default function Notifications(gdkmonitor: Gdk.Monitor) {
   const notifd = Notifd.get_default();
-  const { TOP, RIGHT } = Astal.WindowAnchor;
+  const { BOTTOM, RIGHT } = Astal.WindowAnchor;
 
   const dnd = Dnd.get_default();
   const enabledDnd = createBinding(dnd, "enabled");
@@ -212,10 +212,10 @@ export default function Notifications(gdkmonitor: Gdk.Monitor) {
       class="NotificationsPopup"
       exclusivity={Astal.Exclusivity.NORMAL}
       gdkmonitor={gdkmonitor}
-      anchor={TOP | RIGHT}
+      anchor={BOTTOM | RIGHT}
       application={app}
+      marginBottom={12}
       marginRight={12}
-      marginTop={12}
     >
       <box
         vexpand
