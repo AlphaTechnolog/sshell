@@ -65,7 +65,6 @@ function UserContainer() {
     <box
       class="UserContainer"
       orientation={Gtk.Orientation.VERTICAL}
-      spacing={4}
     >
       <box
         class="ContentInformation"
@@ -82,7 +81,9 @@ function UserContainer() {
                   class="UserPfp"
                   widthRequest={64}
                   heightRequest={64}
+                  vexpand
                   hexpand
+                  valign={Gtk.Align.CENTER}
                   halign={Gtk.Align.CENTER}
                 />
               ) : (
@@ -91,6 +92,8 @@ function UserContainer() {
                   widthRequest={64}
                   heightRequest={64}
                   hexpand
+                  vexpand
+                  valign={Gtk.Align.CENTER}
                   halign={Gtk.Align.CENTER}
                 >
                   <label
@@ -266,7 +269,7 @@ function MainInformation() {
       class="Left"
       widthRequest={400}
       orientation={Gtk.Orientation.VERTICAL}
-      spacing={7}
+      spacing={16}
     >
       <Clock />
       <UserContainer />
@@ -292,8 +295,11 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
       gdkmonitor={gdkmonitor}
       exclusivity={Astal.Exclusivity.NORMAL}
       anchor={TOP}
-      marginTop={7}
+      marginTop={5}
       application={app}
+      heightRequest={670}
+      widthRequest={920}
+      visible
     >
       <box class="MainContent" orientation={Gtk.Orientation.HORIZONTAL}>
         <MainInformation />

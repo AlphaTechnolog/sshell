@@ -1,5 +1,6 @@
 @use 'sass:color';
 @use '../../theme.scss' as *;
+@use './music-player.scss';
 
 window.Dashboard {
   background: transparent;
@@ -12,7 +13,7 @@ window.Dashboard {
     background: rgba($background, $general-opacity);
     border-radius: 12px;
 
-    .Left, .Right { padding: 14px; }
+    .Left, .Right { padding: 16px; }
 
     .Separator {
       background-color: $contrast1;
@@ -21,13 +22,13 @@ window.Dashboard {
     .Left {
       .Clock {
         .Time {
-          font-size: 60px;
+          font-size: 80px;
           font-weight: 300;
         }
 
         .Day {
           color: $light_black;
-          font-size: 12px;
+          font-size: 13px;
         }
       }
 
@@ -35,7 +36,6 @@ window.Dashboard {
         background-color: $contrast1;
         padding: 10px 12px;
         border-radius: 12px;
-        margin-top: 12px;
 
         .ContentInformation {
           .ImageContainer {
@@ -72,12 +72,12 @@ window.Dashboard {
 
           .ContentContainer {
             .Whoami {
-              font-size: 18px;
+              font-size: 22px;
               font-weight: 600;
             }
 
             .Uptime {
-              font-size: 11px;
+              font-size: 12px;
             }
           }
         }
@@ -106,17 +106,16 @@ window.Dashboard {
 
       .SlidersContainer {
         background-color: $contrast1;
-        padding: 10px 12px;
+        padding: 16px;
         border-radius: 12px;
-        margin-top: 12px;
 
         label.Title {
           color: color.adjust($light_black, $lightness: 25%);
-          font-size: 12px;
+          font-size: 14px;
         }
 
         .SliderContainer {
-          label { font-size: 10px; }
+          label { font-size: 12px; }
           &.Disabled label { color: $contrastfg; }
 
           & scale trough {
@@ -134,106 +133,6 @@ window.Dashboard {
           }
         }
       }
-
-      .MusicPlayerContainer {
-        margin-top: 12px;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        border-radius: 12px;
-        padding: 12px;
-
-        &.Disabled {
-          background: linear-gradient(to right, rgba($tinted-white-2, 0.05), rgba($tinted-white-2, 0.125));
-        }
-
-        .PlayingFromChip {
-          $fg: $green;
-          $bg: rgba($green, 0.25);
-
-          background-color: $bg;
-          color: $fg;
-          border-radius: 100px;
-          padding: 2px 12px;
-
-          .Contents { font-size: 12px; }
-
-          .Icon {
-            font-size: 18px;
-            font-family: $font-nf;
-          }
-        }
-
-        .ControlsContainer {
-          .Information {
-            .Title {
-              font-size: 16px;
-              font-weight: bold;
-            }
-
-            .Artist {
-              font-size: 12px;
-              color: $contrast2;
-            }
-
-            .PlayPauseButton {
-              font-family: $font-icons;
-              font-size: 18px;
-              border-radius: 18px;
-              padding: 10px 11px 10px 9px;
-              background-color: $white;
-              color: $black;
-              transition-property: background-color, border-radius;
-              transition-duration: .25s;
-              transition-timing-function: ease;
-
-              &.Playing {
-                padding: 10px;
-                border-radius: 12px;
-              }
-
-              &:hover {
-                background-color: color.adjust($color: $tinted-white, $lightness: -10%);
-              }
-            }
-          }
-
-          .Controls {
-            & scale trough {
-              all: unset;
-              background-color: $contrast2;
-              min-height: 4px;
-              min-width: 170px;
-              border-radius: 100px;
-
-              & highlight {
-                all: unset;
-                border-radius: 100px;
-                background-color: $white;
-              }
-            }
-
-            button {
-              border-radius: 100px;
-              padding: 5px;
-              transition: all ease .2s;
-              font-family: $font-icons;
-              font-size: 14px;
-              font-weight: bold;
-
-              &:hover {
-                background: $contrast1;
-              }
-            }
-          }
-        }
-      }
-
-      .MusicPlayerSkeleton {
-        background: linear-gradient(to right, #101010, #242424);
-        border-radius: 7px;
-        margin-top: 12px;
-      }
     }
 
     .Right {
@@ -249,7 +148,7 @@ window.Dashboard {
         .NoNotificationsContainer {
           label.Icon {
             font-family: $font-nf;
-            font-size: 100px;
+            font-size: 135px;
             font-weight: bold;
             color: $accent;
             padding-right: 35px;
@@ -378,8 +277,8 @@ window.Dashboard {
       .Footer button.ClearAllButton {
         background-color: $contrast1;
         border-radius: 10px;
-        padding: 7px 10px;
-        font-size: 12px;
+        padding: 8px 11px;
+        font-size: 14px;
         transition: all ease .2s;
         &:hover { background-color: $contrast2; }
       }

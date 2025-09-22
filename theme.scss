@@ -20,7 +20,7 @@ $light_magenta: #c9b1ca;
 $light_cyan: #bebeda;
 $light_white: #d7d7d7;
 
-$general-opacity: 0.75;
+$general-opacity: 0.85;
 $contrast1: rgba(#ffffff, 0.05);
 $contrast2: rgba(#ffffff, 0.1);
 $contrastfg: rgba(#ffffff, 0.35);
@@ -29,7 +29,7 @@ $font-regular: Inter;
 $font-icons: Phosphor;
 $font-nf: JetBrainsMono Nerd Font;
 
-$accent: $light_green;
-$accent2: $light_blue;
+$accent: $light_yellow;
+$accent2: $light_yellow;
 $tinted-white: color.mix($accent, $white, 50%);
 $tinted-white-2: color.mix($accent, $white, 75%);

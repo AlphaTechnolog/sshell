@@ -106,7 +106,7 @@ function NotifItem({ notif: n }: { notif: Notifd.Notification }) {
             class="NotifInfo"
           >
             <label
-              label={maxLength(n.summary, 35)}
+              label={maxLength(n.summary, 45)}
               class="Summary"
               hexpand
               halign={Gtk.Align.START}
@@ -202,7 +202,7 @@ export default function Notifications() {
               hexpand
               orientation={Gtk.Orientation.VERTICAL}
               homogeneous={false}
-              spacing={12}
+              spacing={18}
             >
               <With value={notifications}>
                 {(value) => value.length === 0 && <NoNotifications />}
