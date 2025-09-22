@@ -240,7 +240,7 @@ window.Dashboard {
 
             .NotifInfo {
               .Summary {
-                font-size: 14px;
+                font-size: 16px;
                 font-weight: bolder;
               }
 
@@ -279,7 +279,7 @@ window.Dashboard {
         background-color: $contrast1;
         border-radius: 10px;
         padding: 8px 11px;
-        font-size: 14px;
+        font-size: 13px;
         transition: all ease .2s;
         &:hover { background-color: $contrast2; }
       }
