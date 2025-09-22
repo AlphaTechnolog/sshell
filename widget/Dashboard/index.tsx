@@ -79,8 +79,8 @@ function UserContainer() {
                 <box
                   css={faceUrl(u => `background-image: url('file://${u!}')`)}
                   class="UserPfp"
-                  widthRequest={64}
-                  heightRequest={64}
+                  widthRequest={70}
+                  heightRequest={70}
                   vexpand
                   hexpand
                   valign={Gtk.Align.CENTER}
@@ -89,8 +89,8 @@ function UserContainer() {
               ) : (
                 <box
                   class="UserPfpFallback"
-                  widthRequest={64}
-                  heightRequest={64}
+                  widthRequest={70}
+                  heightRequest={70}
                   hexpand
                   vexpand
                   valign={Gtk.Align.CENTER}
@@ -299,7 +299,6 @@ export default function Dashboard(gdkmonitor: Gdk.Monitor) {
       application={app}
       heightRequest={670}
       widthRequest={920}
-      visible
     >
       <box class="MainContent" orientation={Gtk.Orientation.HORIZONTAL}>
         <MainInformation />

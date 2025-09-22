@@ -32,20 +32,20 @@
   .ControlsContainer {
     .Information {
       .Title {
-        font-size: 16px;
+        font-size: 20px;
         font-weight: bold;
       }
 
       .Artist {
-        font-size: 12px;
+        font-size: 13px;
         color: $contrast2;
       }
 
       .PlayPauseButton {
         font-family: $font-icons;
-        font-size: 18px;
+        font-size: 20px;
         border-radius: 18px;
-        padding: 10px 11px 10px 9px;
+        padding: 12px 13px 12px 11px;
         background-color: $white;
         color: $black;
         transition-property: background-color, border-radius;

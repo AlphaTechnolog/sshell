@@ -36,6 +36,7 @@ window.Dashboard {
         background-color: $contrast1;
         padding: 10px 12px;
         border-radius: 12px;
+        margin-top: 16px;
 
         .ContentInformation {
           .ImageContainer {
@@ -55,17 +56,17 @@ window.Dashboard {
               background: $background;
               color: $white;
               border-radius: 100px;
-              font-size: 32px;
+              font-size: 36px;
               font-family: $font-icons;
             }
 
             .ContentOverlay {
-              padding: 4px;
+              padding: 5px;
               border-radius: 100px;
               background-color: $black;
               color: $accent;
               font-weight: bold;
-              font-size: 12px;
+              font-size: 15px;
               font-family: $font-icons;
             }
           }
@@ -84,9 +85,9 @@ window.Dashboard {
 
         .SystemActionButtons button.SystemActionButton {
           background-color: $contrast1;
-          padding: 7px;
+          padding: 9px;
           border-radius: 10px;
-          font-size: 18px;
+          font-size: 20px;
           font-family: $font-icons;
           transition: all ease .2s;
 
