@@ -53,6 +53,7 @@
         transition-timing-function: ease;
 
         &.Playing {
+          padding: 12px;
           border-radius: 12px;
         }
 
