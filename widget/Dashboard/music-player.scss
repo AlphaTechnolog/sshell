@@ -44,7 +44,7 @@
       .PlayPauseButton {
         font-family: $font-icons;
         font-size: 20px;
-        border-radius: 18px;
+        border-radius: 17px;
         padding: 12px 13px 12px 11px;
         background-color: $white;
         color: $black;
@@ -53,7 +53,6 @@
         transition-timing-function: ease;
 
         &.Playing {
-          padding: 10px;
           border-radius: 12px;
         }
 
