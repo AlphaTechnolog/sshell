@@ -12,6 +12,7 @@ window.Dashboard {
   .MainContent {
     background: rgba($background, $general-opacity);
     border-radius: 12px;
+    border: solid $contrast1 1px;
 
     .Left, .Right { padding: 16px; }
 
