@@ -63,6 +63,14 @@ window.ControlCenter {
         @include beautiful-hover("PoweroffButton", $red);
       }
 
+      .CpuIcon, .RamIcon {
+        font-family: $font-icons;
+        font-size: 14px;
+      }
+
+      .CpuIcon { color: $light_yellow; }
+      .RamIcon { color: $light_magenta; }
+
       .CloseButton {
         font-family: $font-icons;
         font-size: 16px;
@@ -86,9 +94,9 @@ window.ControlCenter {
 
         button.ToggleIcon {
           background: $contrast1;
-          font-size: 10px;
+          font-size: 11px;
           font-family: $font-regular;
-          padding: 10px 12px;
+          padding: 14px 16px;
           border-radius: 10px;
           border-top-right-radius: 0px;
           border-bottom-right-radius: 0px;
@@ -102,11 +110,11 @@ window.ControlCenter {
 
           .Icon {
             font-family: $font-icons;
-            font-size: 22px;
+            font-size: 26px;
           }
 
           .Title {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
           }
 
@@ -126,6 +134,40 @@ window.ControlCenter {
           border-bottom-left-radius: 0px;
           transition: all ease .2s;
           &:hover { background-color: $contrast2; }
+        }
+      }
+
+      .KeyboardsLayout {
+        background-color: $contrast1;
+        border-radius: 12px;
+        padding: 16px;
+
+        .Header {
+          font-size: 14px;
+          color: color.adjust($light_black, $lightness: 25%);
+        }
+
+        .Content {
+          font-size: 14px;
+
+          .Item {
+            border-radius: 8px;
+            padding: 6px 12px;
+            transition: all ease .2s;
+            font-size: 13px;
+
+            &:hover { background-color: $contrast1; }
+            &.Active { background-color: $contrast1; }
+
+            .ActiveChip {
+              font-size: 13px;
+              color: $accent2;
+              background-color: rgba($accent, 0.10);
+              padding: 4px 10px;
+              border-radius: 100px;
+              &.Inactive { background-color: transparent; }
+            }
+          }
         }
       }
     }

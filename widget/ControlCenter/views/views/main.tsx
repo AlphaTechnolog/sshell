@@ -1,19 +1,21 @@
 import { Gtk } from "ags/gtk4";
 import { ViewContainer } from "../view-container";
 import { type ViewContentProps } from "../types";
-import { createBinding, createComputed, type Accessor } from "gnim";
+import { createBinding, createComputed, createState, For, With, type Accessor } from "gnim";
 
+import Hyprland from "gi://AstalHyprland";
 import Network from "gi://AstalNetwork";
 import { Dnd } from "../../../../services";
 import { useNetworkIcon } from "../../../../hooks";
-import { execAsync } from "ags/process";
+import { exec, execAsync } from "ags/process";
+import { ControlSliders } from "../../../common";
 
 type ChipProps = {
   icon: string | Accessor<string>;
   label: string | Accessor<string>;
   summary: string | Accessor<string>;
   active?: Accessor<boolean>;
-  showChevronRight?: boolean;
+  showChevronRight?: boolean | Accessor<boolean>;
   onToggle?(): void;
   onConfig?(): void;
 };
@@ -40,6 +42,18 @@ function Chip({
         hexpand
         vexpand
         onClicked={onToggle}
+        $={self => {
+          // :sob:
+          if (typeof showChevronRight !== "boolean") {
+            const update = () => {
+              if (showChevronRight.get() === false) {
+                self.add_css_class("Only");
+              }
+            }
+            update();
+            showChevronRight.subscribe(update);
+          }
+        }}
       >
         <box vexpand hexpand orientation={Gtk.Orientation.HORIZONTAL} spacing={10}>
           <label label={icon} vexpand valign={Gtk.Align.CENTER} class="Icon" />
@@ -84,6 +98,22 @@ function Chip({
 function NetworkChip() {
   const { icon, primary, active } = useNetworkIcon();
 
+  const summary = createComputed(get => {
+    switch (get(primary)) {
+      case Network.Primary.WIFI: {
+        return "Wi-Fi";
+      }
+      case Network.Primary.WIRED: {
+        return "Ethernet";
+      }
+      default: {
+        return "Unknown"
+      }
+    }
+  });
+
+  const handleConfig = () => console.log("");
+
   const handleToggle = () => {
     if (primary.get() === Network.Primary.WIFI) {
       // TODO: Do toggle
@@ -91,16 +121,15 @@ function NetworkChip() {
     }
   };
 
-  const handleConfig = () => console.log("");
-
   return (
     <Chip
       icon={icon}
       label="Network"
-      summary="Ethernet"
+      summary={summary}
       active={active}
       onToggle={handleToggle}
       onConfig={handleConfig}
+      showChevronRight={primary(p => p === Network.Primary.WIFI)}
     />
   );
 }
@@ -124,28 +153,131 @@ function DndChip() {
   );
 }
 
+function Chips() {
+  return (
+    <box vexpand hexpand orientation={Gtk.Orientation.VERTICAL} homogeneous spacing={12}>
+      <box hexpand valign={Gtk.Align.CENTER} vexpand orientation={Gtk.Orientation.HORIZONTAL} homogeneous spacing={12}>
+        <NetworkChip />
+        <DndChip />
+      </box>
+      <box hexpand valign={Gtk.Align.CENTER} vexpand orientation={Gtk.Orientation.HORIZONTAL} homogeneous spacing={12}>
+        <Chip
+          icon={"\uE5D6"}
+          label="Airplane mode"
+          summary="Turned Off"
+          showChevronRight={false}
+        />
+        <Chip
+          icon={"\uE2DC"}
+          label="Redshift"
+          summary="Night Light is Off"
+          showChevronRight={false}
+        />
+      </box>
+    </box>
+  );
+}
+
+function KeyboardLayouts() {
+  const hyprland = Hyprland.get_default();
+  const [layouts, setLayouts] = createState<string[]>(["us"]);
+  const [activeLayout, setActiveLayout] = createState<string>("us");
+
+  const layoutNames = {
+    "es": "Spanish",
+    "us": "English (US)",
+    "latam": "Spanish (Latin America)",
+    "de": "German",
+  }
+
+  const getLayoutName = (layout: string): string => {
+    if (layout in layoutNames) return layoutNames[layout as keyof typeof layoutNames];
+    return layout;
+  }
+
+  const getKeymapInformation = async () => {
+    try {
+      const layouts = (await execAsync(["bash", "-c", "hyprctl devices -j | jq '.keyboards[] | select(.main == true) | .layout' -r"])).split(",");
+      const activeLayoutIdx = await execAsync(["bash", "-c", "hyprctl devices -j | jq '.keyboards[] | select(.main == true) | .active_layout_index' -r"]);
+      const activeLayout = layouts[Number(activeLayoutIdx)] ?? "<undefined>";
+      setLayouts(layouts);
+      setActiveLayout(activeLayout);
+    } catch (err) {
+      console.log("error occurred with layouts", err);
+    }
+  }
+
+  getKeymapInformation();
+
+  hyprland.connect("keyboard-layout", (_self, _0, _1) => {
+    getKeymapInformation();
+  });
+
+  const setup = (self: Gtk.Button, layout: string) => {
+    if (!self.has_css_class("Item")) self.add_css_class("Item");
+
+    const update = () => {
+      if (activeLayout.get() === layout) self.add_css_class("Active");
+      else if (self.has_css_class("Active")) self.remove_css_class("Active");
+    }
+
+    update();
+    activeLayout.subscribe(update);
+  }
+
+  const onChoose = (layout: string) => {
+    const mainDevice = exec(["bash", "-c", "hyprctl devices -j | jq '.keyboards[] | select(.main == true) | .name' -r"]);
+    const newIndex = layouts.get().indexOf(layout).toString();
+    exec(["hyprctl", "switchxkblayout", mainDevice, newIndex])
+  }
+
+  return (
+    <box class="KeyboardsLayout" orientation={Gtk.Orientation.VERTICAL} spacing={12}>
+      <label
+        label="Layouts"
+        valign={Gtk.Align.CENTER}
+        halign={Gtk.Align.START}
+        class="Header"
+      />
+      <box class="Content" orientation={Gtk.Orientation.VERTICAL} spacing={7}>
+        <For each={layouts}>
+          {layout => (
+            <button
+              class="Item"
+              hexpand
+              valign={Gtk.Align.CENTER}
+              onClicked={() => onChoose(layout)}
+              $={(self: Gtk.Button) => setup(self, layout)}
+            >
+              <box orientation={Gtk.Orientation.HORIZONTAL} homogeneous vexpand hexpand>
+                <label
+                  label={getLayoutName(layout)}
+                  halign={Gtk.Align.START}
+                  vexpand
+                />
+                <box
+                  vexpand
+                  halign={Gtk.Align.END}
+                  class={activeLayout(a => a === layout ? "ActiveChip" : "ActiveChip Inactive")}
+                >
+                  <label label={activeLayout(a => a === layout ? "Active" : " ")} />
+                </box>
+              </box>
+            </button>
+          )}
+        </For>
+      </box>
+    </box>
+  )
+}
+
 export function Main(_: ViewContentProps) {
   return (
     <ViewContainer extraClass="MainView">
-      <box vexpand hexpand orientation={Gtk.Orientation.VERTICAL} homogeneous spacing={12}>
-        <box hexpand valign={Gtk.Align.CENTER} vexpand orientation={Gtk.Orientation.HORIZONTAL} homogeneous spacing={12}>
-          <NetworkChip />
-          <DndChip />
-        </box>
-        <box hexpand valign={Gtk.Align.CENTER} vexpand orientation={Gtk.Orientation.HORIZONTAL} homogeneous spacing={12}>
-          <Chip
-            icon={"\uE5D6"}
-            label="Airplane mode"
-            summary="Turned Off"
-            showChevronRight={false}
-          />
-          <Chip
-            icon={"\uE2DC"}
-            label="Redshift"
-            summary="Night Light is Off"
-            showChevronRight={false}
-          />
-        </box>
+      <box vexpand hexpand orientation={Gtk.Orientation.VERTICAL} spacing={12}>
+        <Chips />
+        <ControlSliders />
+        <KeyboardLayouts />
       </box>
     </ViewContainer>
   );   

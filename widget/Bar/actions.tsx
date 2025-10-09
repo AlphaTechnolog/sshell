@@ -80,8 +80,6 @@ export default function Actions(args: { $type: string; }) {
       <button
         class="Poweroff"
         iconName="system-shutdown"
-        // TODO: Show confirmation
-        onClicked={() => exec("systemctl poweroff")}
       />
     </box>
   );

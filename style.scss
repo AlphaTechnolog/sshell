@@ -2,6 +2,7 @@
 @use "./widget/Dashboard/style.scss" as dashboard;
 @use "./widget/OSD/style.scss" as osd;
 @use "./widget/Notifications/style.scss" as notifications;
+@use "./widget/common/style.scss" as common;
 @use "./widget/ControlCenter/style.scss" as controlCenter;
 
 * {

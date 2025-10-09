@@ -105,36 +105,6 @@ window.Dashboard {
           @include beautiful-hover("PoweroffButton", $red);
         }
       }
-
-      .SlidersContainer {
-        background-color: $contrast1;
-        padding: 16px;
-        border-radius: 12px;
-
-        label.Title {
-          color: color.adjust($light_black, $lightness: 25%);
-          font-size: 14px;
-        }
-
-        .SliderContainer {
-          label { font-size: 12px; }
-          &.Disabled label { color: $contrastfg; }
-
-          & scale trough {
-            all: unset;
-            background-color: $contrast2;
-            min-height: 4px;
-            min-width: 170px;
-            border-radius: 100px;
-
-            & highlight {
-              all: unset;
-              border-radius: 100px;
-              background-color: $tinted-white;
-            }
-          }
-        }
-      }
     }
 
     .Right {
