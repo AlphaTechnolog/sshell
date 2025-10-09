@@ -9,6 +9,7 @@ import { Dnd } from "../../../../services";
 import { useNetworkIcon } from "../../../../hooks";
 import { exec, execAsync } from "ags/process";
 import { ControlSliders } from "../../../common";
+import { S_PER_MS } from "../../../../constants";
 
 type ChipProps = {
   icon: string | Accessor<string>;
@@ -29,6 +30,13 @@ function Chip({
   onToggle,
   onConfig,
 }: ChipProps) {
+  const toggleIconClass = createComputed(get => {
+    let showIcon = false;
+    if (typeof showChevronRight === "boolean") showIcon = showChevronRight;
+    else showIcon = get(showChevronRight);
+    return `ToggleIcon ${showIcon ? "" : "Only"}`;
+  });
+
   return (
     <box
       class={!active ? "Chip" : active(a => `Chip ${a ? "Active" : ""}`)}
@@ -38,22 +46,10 @@ function Chip({
       spacing={2}
     >
       <button
-        class={`ToggleIcon ${showChevronRight ? "" : "Only"}`}
+        class={toggleIconClass}
         hexpand
         vexpand
         onClicked={onToggle}
-        $={self => {
-          // :sob:
-          if (typeof showChevronRight !== "boolean") {
-            const update = () => {
-              if (showChevronRight.get() === false) {
-                self.add_css_class("Only");
-              }
-            }
-            update();
-            showChevronRight.subscribe(update);
-          }
-        }}
       >
         <box vexpand hexpand orientation={Gtk.Orientation.HORIZONTAL} spacing={10}>
           <label label={icon} vexpand valign={Gtk.Align.CENTER} class="Icon" />
@@ -179,9 +175,16 @@ function Chips() {
 }
 
 function KeyboardLayouts() {
+  const REVEAL_TIMEOUT = 0.5 * S_PER_MS;
+
   const hyprland = Hyprland.get_default();
   const [layouts, setLayouts] = createState<string[]>(["us"]);
   const [activeLayout, setActiveLayout] = createState<string>("us");
+  const [revealChild, setRevealChild] = createState(true);
+
+  const toggleLayouts = () => {
+    setRevealChild(!revealChild.get());
+  }
 
   const layoutNames = {
     "es": "Spanish",
@@ -232,41 +235,85 @@ function KeyboardLayouts() {
   }
 
   return (
-    <box class="KeyboardsLayout" orientation={Gtk.Orientation.VERTICAL} spacing={12}>
-      <label
-        label="Layouts"
-        valign={Gtk.Align.CENTER}
-        halign={Gtk.Align.START}
-        class="Header"
-      />
-      <box class="Content" orientation={Gtk.Orientation.VERTICAL} spacing={7}>
-        <For each={layouts}>
-          {layout => (
-            <button
-              class="Item"
-              hexpand
+    <box class="KeyboardsLayout" orientation={Gtk.Orientation.VERTICAL}>
+      <button
+        vexpand
+        hexpand
+        valign={Gtk.Align.START}
+        onClicked={toggleLayouts}
+      >
+        <box
+          orientation={Gtk.Orientation.HORIZONTAL}
+          class="HeaderContainer"
+          hexpand
+          vexpand
+        >
+          <box
+            orientation={Gtk.Orientation.HORIZONTAL}
+            spacing={7}
+            hexpand
+            vexpand
+          >
+            <label
+              halign={Gtk.Align.START}
               valign={Gtk.Align.CENTER}
-              onClicked={() => onChoose(layout)}
-              $={(self: Gtk.Button) => setup(self, layout)}
-            >
-              <box orientation={Gtk.Orientation.HORIZONTAL} homogeneous vexpand hexpand>
-                <label
-                  label={getLayoutName(layout)}
-                  halign={Gtk.Align.START}
-                  vexpand
-                />
-                <box
-                  vexpand
-                  halign={Gtk.Align.END}
-                  class={activeLayout(a => a === layout ? "ActiveChip" : "ActiveChip Inactive")}
-                >
-                  <label label={activeLayout(a => a === layout ? "Active" : " ")} />
+              label="Kb Layouts"
+              class="Header"
+            />
+            <label
+              class={revealChild(revealed => `CollapsedChip ${revealed ? "Invisible" : ""}`)}
+              valign={Gtk.Align.CENTER}
+              hexpand
+              halign={Gtk.Align.START}
+              label={activeLayout(getLayoutName)}
+            />
+          </box>
+          <label
+            hexpand
+            halign={Gtk.Align.END}
+            valign={Gtk.Align.CENTER}
+            label={revealChild(visible => visible ? "\uE13C" : "\uE136")}
+            class="RevealButton"
+          />
+        </box>
+      </button>
+
+      <Gtk.Revealer
+        transition_type={Gtk.RevealerTransitionType.SLIDE_DOWN}
+        transition_duration={REVEAL_TIMEOUT}
+        revealChild={revealChild}
+        hexpand
+        vexpand
+      >
+        <box class="Content" orientation={Gtk.Orientation.VERTICAL} spacing={7} marginTop={12}>
+          <For each={layouts}>
+            {layout => (
+              <button
+                class="Item"
+                hexpand
+                valign={Gtk.Align.CENTER}
+                onClicked={() => onChoose(layout)}
+                $={(self: Gtk.Button) => setup(self, layout)}
+              >
+                <box orientation={Gtk.Orientation.HORIZONTAL} homogeneous vexpand hexpand>
+                  <label
+                    label={getLayoutName(layout)}
+                    halign={Gtk.Align.START}
+                    vexpand
+                  />
+                  <box
+                    vexpand
+                    halign={Gtk.Align.END}
+                    class={activeLayout(a => a === layout ? "ActiveChip" : "ActiveChip Inactive")}
+                  >
+                    <label label={activeLayout(a => a === layout ? "Active" : " ")} />
+                  </box>
                 </box>
-              </box>
-            </button>
-          )}
-        </For>
-      </box>
+              </button>
+            )}
+          </For>
+        </box>
+      </Gtk.Revealer>
     </box>
   )
 }

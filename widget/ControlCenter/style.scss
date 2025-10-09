@@ -142,9 +142,27 @@ window.ControlCenter {
         border-radius: 12px;
         padding: 16px;
 
-        .Header {
-          font-size: 14px;
-          color: color.adjust($light_black, $lightness: 25%);
+        .HeaderContainer {
+          .Header {
+            font-size: 14px;
+            color: color.adjust($light_black, $lightness: 25%);
+          }
+          .CollapsedChip {
+            color: $accent2;
+            background: rgba($accent2, 0.10);
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 12px;
+            transition: all ease .2s;
+            &.Invisible {
+              background: transparent;
+              color: transparent;
+            }
+          }
+          .RevealButton {
+            font-family: $font-icons;
+            font-size: 16px;
+          }
         }
 
         .Content {

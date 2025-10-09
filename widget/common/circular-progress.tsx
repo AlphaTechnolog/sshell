@@ -1,5 +1,4 @@
 import { Gdk, Gtk } from "ags/gtk4";
-import { createPoll } from "ags/time";
 import { Accessor } from "gnim";
 
 const RADIUS = 13;
