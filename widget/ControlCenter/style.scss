@@ -180,7 +180,7 @@ window.ControlCenter {
             .ActiveChip {
               font-size: 13px;
               color: $accent2;
-              background-color: rgba($accent, 0.10);
+              background-color: rgba($accent2, 0.10);
               padding: 4px 10px;
               border-radius: 100px;
               &.Inactive { background-color: transparent; }
