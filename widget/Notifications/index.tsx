@@ -184,7 +184,7 @@ export default function Notifications(gdkmonitor: Gdk.Monitor) {
   notifd.connect("notified", (_, id) => {
     if (!enabledDnd.get()) {
       set(id, {
-        notif: notifd.get_notification(id),
+        notif: notifd.get_notification(id)!,
         remove,
       });
     }

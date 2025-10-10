@@ -8,7 +8,7 @@ const home = () => GLib.get_home_dir();
 export class User extends GObject.Object {
   static instance: User;
   static get_default() {
-    return this.instance || (this.instance = new User());
+    return this.instance ||= new User();
   }
 
   private static PFP_PATH = `${home()}/.face`;

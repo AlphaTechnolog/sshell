@@ -10,12 +10,15 @@ import ControlCenter from "./widget/ControlCenter";
 app.start({
   css: style,
   main() {
-    app.get_monitors().forEach(mon => {
+    app.get_monitors().forEach((mon, idx) => {
+      const isPrimary = idx === 0; // for wayland we've to stick with the first one
       Bar(mon);
       Dashboard(mon);
-      OSD(mon);
       ControlCenter(mon);
-      Notifications(mon);
+      if (isPrimary) {
+        OSD(mon);
+        Notifications(mon);
+      }
     });
   },
 })

@@ -1,4 +1,5 @@
 @use 'sass:color';
+@use '../../utils.scss';
 @use '../../theme.scss' as *;
 
 window.Bar {
@@ -15,7 +16,7 @@ window.Bar {
     .WorkspacesContainer .Button {
       padding: 6px 12px;
       transition: all ease .2s;
-      color: color.adjust($color: $light_black, $lightness: 15%);
+      color: utils.adjust-color($color: $light_black, $lightness: 15%);
       border-radius: 7px;
 
       &.Occupied {

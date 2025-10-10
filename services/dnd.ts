@@ -6,7 +6,7 @@ import GObject, { register, getter, setter } from "gnim/gobject";
 export class Dnd extends GObject.Object {
   static instance: Dnd;
   static get_default() {
-    return this.instance || (this.instance = new Dnd());
+    return this.instance ||= new Dnd();
   }
 
   private static CACHE_FILE = GLib.get_user_cache_dir() + "/dnd.status";

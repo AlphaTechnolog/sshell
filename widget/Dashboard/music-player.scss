@@ -1,4 +1,5 @@
 @use 'sass:color';
+@use '../../utils.scss';
 @use '../../theme.scss' as *;
 
 .MusicPlayerContainer {
@@ -8,8 +9,17 @@
   border-radius: 12px;
   padding: 14px;
 
+  @if $light_mode {
+    color: $background;
+  }
+
   &.Disabled {
     background: linear-gradient(to right, rgba($tinted-white-2, 0.05), rgba($tinted-white-2, 0.125));
+    @if $light_mode {
+      background: linear-gradient(to right, $contrast2, $contrast1);
+      .Title { color: $foreground; }
+      .PreviousControl, .NextControl { color: $foreground; }
+    }
   }
 
   .PlayingFromChip {
@@ -39,6 +49,7 @@
       .Artist {
         font-size: 13px;
         color: $contrast2;
+        @if $light_mode { color: $light_black; }
       }
 
       .PlayPauseButton {
@@ -46,11 +57,17 @@
         font-size: 20px;
         border-radius: 17px;
         padding: 12px 13px 12px 11px;
-        background-color: $white;
-        color: $black;
         transition-property: background-color, border-radius;
         transition-duration: .25s;
         transition-timing-function: ease;
+
+        background-color: $white;
+        color: $black;
+
+        @if $light_mode {
+          background-color: $black;
+          color: $white;
+        }
 
         &.Playing {
           padding: 12px;
@@ -58,7 +75,7 @@
         }
 
         &:hover {
-          background-color: color.adjust($color: $tinted-white, $lightness: -10%);
+          background-color: utils.adjust-color($color: $tinted-white, $lightness: -10%);
         }
       }
     }
@@ -66,15 +83,17 @@
     .Controls {
       & scale trough {
         all: unset;
-        background-color: $contrast2;
         min-height: 4px;
         min-width: 170px;
         border-radius: 100px;
+        background-color: $contrast2;
+        @if $light_mode { background-color: utils.adjust-color($light_black, $lightness: 10%); }
 
         & highlight {
           all: unset;
           border-radius: 100px;
           background-color: $white;
+          @if $light_mode { background-color: $black; }
         }
       }
 

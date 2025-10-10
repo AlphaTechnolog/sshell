@@ -10,7 +10,7 @@ const UPDATE_MS = 10 * S_PER_MS;
 export class Uptime extends GObject.Object {
   static instance: Uptime;
   static get_default() {
-    return this.instance || (this.instance = new Uptime());
+    return this.instance ||= new Uptime();
   }
 
   #seconds = Number(readFile("/proc/uptime").split(" ")[0]);

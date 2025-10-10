@@ -1,4 +1,5 @@
 @use 'sass:color';
+@use '../../utils.scss';
 @use '../../theme.scss' as *;
 @use './music-player.scss';
 
@@ -171,7 +172,7 @@ window.Dashboard {
               font-family: $font-icons;
               font-size: 24px;
               font-weight: bolder;
-              background: linear-gradient(to bottom right, $background, color.adjust($background, $lightness: 8%));
+              background: linear-gradient(to bottom right, $background, utils.adjust-color($background, $lightness: 8%));
               color: $tinted-white;
               border: solid 2px $black;
               border-radius: 100px;

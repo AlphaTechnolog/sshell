@@ -1,5 +1,5 @@
 import { Gdk, Gtk } from "ags/gtk4";
-import { Accessor } from "gnim";
+import { Accessor, onCleanup } from "gnim";
 
 const RADIUS = 13;
 const LINE_WIDTH = 2;
@@ -11,11 +11,12 @@ function Arc({ percent, activeLookupColor }: { percent: Accessor<number>, active
   }
 
   function setup(self: Gtk.DrawingArea) {
-    percent.subscribe(() => self.queue_draw());
+    const dispose = percent.subscribe(() => self.queue_draw());
+
     self.set_draw_func((_area, cr, width, height) => {
       const context = self.get_style_context();
 
-      const [successTrough, troughColor] = context.lookup_color("ags-trough-color");
+      const [successTrough, troughColor] = context.lookup_color("ags-cprgs-trough-color");
       const [successActive, activeColor] = context.lookup_color(activeLookupColor);
 
       const defaultTrough = [0.2, 0.2, 0.2];
@@ -40,6 +41,8 @@ function Arc({ percent, activeLookupColor }: { percent: Accessor<number>, active
       cr.arc(centerX, centerY, RADIUS, startAngle, endAngle);
       cr.stroke();
     });
+
+    onCleanup(() => dispose());
   }
 
   return (
@@ -50,7 +53,7 @@ function Arc({ percent, activeLookupColor }: { percent: Accessor<number>, active
       halign={Gtk.Align.CENTER}
       class="CircularProgress"
       $={setup}
-    />  
+    />
   )
 }
 

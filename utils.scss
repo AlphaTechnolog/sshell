@@ -1,5 +1,6 @@
 @use "sass:math";
 @use "sass:color";
+@use "theme.scss";
 
 @function red($color) { @return color.channel($color, "red", rgb); }
 @function green($color) { @return color.channel($color, "green", rgb); }
@@ -42,4 +43,11 @@
   } @else {
     color: $fg;
   }
+}
+
+@function adjust-color($color, $lightness) {
+  @if theme.$light_mode {
+    $lightness: $lightness * -1;
+  }
+  @return color.adjust($color: $color, $lightness: $lightness);
 }

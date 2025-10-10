@@ -13,6 +13,7 @@ window.ControlCenter {
     background: rgba($background, $general-opacity);
     border-radius: 12px;
     padding: 12px;
+    border: solid $contrast1 1px;
 
     .Header {
       .Pfp {
@@ -88,7 +89,7 @@ window.ControlCenter {
           button.ToggleIcon, button.ConfigButton {
             $hover-lightness: 0.15;
             @include utils.set-scheme($bg: $accent, $fg: $foreground, $fallback-fg: $black);
-            &:hover { background-color: color.adjust($color: $accent, $lightness: 5%); }
+            &:hover { background-color: utils.adjust-color($color: $accent, $lightness: 5%); }
           }
         }
 
@@ -145,7 +146,7 @@ window.ControlCenter {
         .HeaderContainer {
           .Header {
             font-size: 14px;
-            color: color.adjust($light_black, $lightness: 25%);
+            color: utils.adjust-color($light_black, $lightness: 25%);
           }
           .CollapsedChip {
             color: $accent2;

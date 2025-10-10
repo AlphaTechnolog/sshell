@@ -5,7 +5,7 @@ import { createBinding, createComputed, createState, For, With, type Accessor } 
 
 import Hyprland from "gi://AstalHyprland";
 import Network from "gi://AstalNetwork";
-import { Dnd } from "../../../../services";
+import { Dnd, Theme, ActiveThemes } from "../../../../services";
 import { useNetworkIcon } from "../../../../hooks";
 import { exec, execAsync } from "ags/process";
 import { ControlSliders } from "../../../common";
@@ -149,6 +149,37 @@ function DndChip() {
   );
 }
 
+function DarkModeChip() {
+  const theme = Theme.get_default();
+  const activeTheme = createBinding(theme, "colorscheme");
+  const icon = createComputed([activeTheme], (t) => {
+    switch (t) {
+      case ActiveThemes.dark: return "\uE53E";
+      case ActiveThemes.light: return "\uE472";
+      default: return "";
+    }
+  });
+
+  const toggleTheme = () => {
+    if (activeTheme.get() === ActiveThemes.dark) {
+      theme.colorscheme = ActiveThemes.light;
+    } else {
+      theme.colorscheme = ActiveThemes.dark;
+    }
+  }
+
+  return (
+    <Chip
+      icon={icon}
+      label="Dark mode"
+      summary="Enabled"
+      active={activeTheme(a => a === ActiveThemes.dark)}
+      showChevronRight={false}
+      onToggle={toggleTheme}
+    />
+  );
+}
+
 function Chips() {
   return (
     <box vexpand hexpand orientation={Gtk.Orientation.VERTICAL} homogeneous spacing={12}>
@@ -157,12 +188,7 @@ function Chips() {
         <DndChip />
       </box>
       <box hexpand valign={Gtk.Align.CENTER} vexpand orientation={Gtk.Orientation.HORIZONTAL} homogeneous spacing={12}>
-        <Chip
-          icon={"\uE5D6"}
-          label="Airplane mode"
-          summary="Turned Off"
-          showChevronRight={false}
-        />
+        <DarkModeChip />
         <Chip
           icon={"\uE2DC"}
           label="Redshift"
@@ -206,7 +232,7 @@ function KeyboardLayouts() {
       setLayouts(layouts);
       setActiveLayout(activeLayout);
     } catch (err) {
-      console.log("error occurred with layouts", err);
+      console.error("error occurred with layouts", err);
     }
   }
 
@@ -327,5 +353,5 @@ export function Main(_: ViewContentProps) {
         <KeyboardLayouts />
       </box>
     </ViewContainer>
-  );   
+  );
 }

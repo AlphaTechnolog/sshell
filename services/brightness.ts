@@ -13,7 +13,7 @@ const screen = exec(`bash -c "ls -w1 /sys/class/backlight | head -1"`)
 export class Brightness extends GObject.Object {
   static instance: Brightness
   static get_default() {
-    return this.instance || (this.instance = new Brightness());
+    return this.instance ||= new Brightness();
   }
 
   #screenMax = brightnessctl("max");
@@ -45,6 +45,6 @@ export class Brightness extends GObject.Object {
       const v = await readFileAsync(f);
       this.#screen = Number(v) / this.#screenMax;
       this.notify("screen");
-    })
+    });
   }
 }
