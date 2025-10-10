@@ -8,6 +8,8 @@ import Notifications from "./widget/Notifications";
 import ControlCenter from "./widget/ControlCenter";
 import Confirm from "./widget/Confirm";
 
+import "./daemons";
+
 app.start({
   css: style,
   main() {
