@@ -5,6 +5,7 @@ import Hyprland from "gi://AstalHyprland";
 import { exec, execAsync } from "ags/process";
 import { S_PER_MS } from "../../constants";
 import { timeout, Timer } from "ags/time";
+import Pango10 from "gi://Pango";
 
 const hyprland = Hyprland.get_default();
 const REVEAL_TIMEOUT = 0.45 * S_PER_MS;
@@ -63,6 +64,8 @@ function OSD({ visible, setVisible }: {
         hexpand
         halign={Gtk.Align.CENTER}
         class="LayoutName"
+        wrap
+        wrapMode={Pango10.WrapMode.WORD_CHAR}
       />
     </box>
   );
