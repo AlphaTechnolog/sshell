@@ -27,6 +27,7 @@ window.ControlCenter {
         border-radius: 100px;
         background: $background;
         color: $white;
+        @if $light_mode { background: $contrast1; }
         font-size: 16px;
         font-weight: 600;
         font-family: $font-icons;
@@ -89,7 +90,7 @@ window.ControlCenter {
           button.ToggleIcon .Summary { color: inherit; }
           button.ToggleIcon, button.ConfigButton {
             $hover-lightness: 0.15;
-            @include utils.set-scheme($bg: $accent, $fg: $foreground, $fallback-fg: $black);
+            @include utils.set-scheme($bg: $accent, $fg: $black, $fallback-fg: $background);
             &:hover { background-color: utils.adjust-color($color: $accent, $lightness: 5%); }
           }
         }

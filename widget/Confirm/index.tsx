@@ -50,84 +50,86 @@ export default function Confirm(gdkmonitor: Gdk.Monitor) {
           orientation={Gtk.Orientation.VERTICAL}
           widthRequest={320}
         >
-          <box
-            hexpand
-            valign={Gtk.Align.START}
-            class="Header"
-            orientation={Gtk.Orientation.HORIZONTAL}
-          >
-            <box
-              class="IconContainer"
-              hexpand
-              halign={Gtk.Align.CENTER}
-              vexpand
-              valign={Gtk.Align.CENTER}
-            >
-              <label
+          <overlay>
+            <box hexpand vexpand orientation={Gtk.Orientation.VERTICAL}>
+              <box
+                hexpand
+                valign={Gtk.Align.START}
+                class="Header"
+                orientation={Gtk.Orientation.HORIZONTAL}
+              >
+                <box
+                  class="IconContainer"
+                  hexpand
+                  halign={Gtk.Align.CENTER}
+                  vexpand
+                  valign={Gtk.Align.CENTER}
+                >
+                  <label
+                    hexpand
+                    vexpand
+                    halign={Gtk.Align.CENTER}
+                    valign={Gtk.Align.CENTER}
+                    class={iconStyle(style => `Icon ${style}`)}
+                    label={icon}
+                  />
+                </box>
+              </box>
+              <box
                 hexpand
                 vexpand
-                halign={Gtk.Align.CENTER}
-                valign={Gtk.Align.CENTER}
-                class={iconStyle(style => `Icon ${style}`)}
-                label={icon}
-              />
-            </box>
-          </box>
-          <box
-            hexpand
-            vexpand
-            orientation={Gtk.Orientation.VERTICAL}
-            spacing={12}
-            class="ContentContainer"
-          >
-            <label
-              label={title}
-              class="Title"
-              hexpand
-              halign={Gtk.Align.CENTER}
-            />
-            <label
-              label={summary}
-              class="Summary"
-              hexpand
-              xalign={0.5}
-              halign={Gtk.Align.CENTER}
-            />
-          </box>
-          <box
-            hexpand
-            homogeneous
-            valign={Gtk.Align.END}
-            class="FooterContainer"
-            marginTop={22}
-          >
-            <For each={actions}>
-              {action => (
-                <button
+                orientation={Gtk.Orientation.VERTICAL}
+                spacing={12}
+                class="ContentContainer"
+              >
+                <label
+                  label={title}
+                  class="Title"
                   hexpand
-                  vexpand
-                  class={action.style ?? ""}
-                  onClicked={() => handleActionClick(action)}
-                >
-                  {action.label}
-                </button>
-              )}
-            </For>
-            {/*<button
-              class="Regular"
-              hexpand
-              vexpand
-            >
-              Cancel
-            </button>
+                  halign={Gtk.Align.CENTER}
+                />
+                <label
+                  label={summary}
+                  class="Summary"
+                  hexpand
+                  xalign={0.5}
+                  halign={Gtk.Align.CENTER}
+                />
+              </box>
+              <box
+                hexpand
+                homogeneous
+                valign={Gtk.Align.END}
+                class="FooterContainer"
+                marginTop={22}
+              >
+                <For each={actions}>
+                  {action => (
+                    <button
+                      hexpand
+                      vexpand
+                      class={action.style ?? ""}
+                      onClicked={() => handleActionClick(action)}
+                    >
+                      {action.label}
+                    </button>
+                  )}
+                </For>
+              </box>
+            </box>
             <button
-              class="Error"
-              hexpand
+              $type="overlay"
               vexpand
-            >
-              Confirm
-            </button>*/}
-          </box>
+              hexpand
+              valign={Gtk.Align.START}
+              halign={Gtk.Align.END}
+              class="CloseButton"
+              label={"\uE4F6"}
+              marginTop={7}
+              marginEnd={7}
+              onClicked={() => confirm.closeConfirm()}
+            />
+          </overlay>
         </box>
       </box>
     </window>

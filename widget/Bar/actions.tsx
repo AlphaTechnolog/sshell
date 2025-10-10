@@ -10,6 +10,7 @@ import { clamp } from "../../utils/math";
 
 import MusicIndicator from "./music-indicator";
 import { useNetworkIcon } from "../../hooks";
+import { usePoweroff } from "../../utils/use-poweroff";
 
 const wp = Wp.get_default();
 
@@ -58,34 +59,11 @@ export function DndIcon() {
 
 export default function Actions(args: { $type: string; }) {
   const [visibleCC, setVisibleCC] = createState(false);
+  const { poweroff } = usePoweroff();
 
   const handleClick = () => {
     const cc = app.get_window("ControlCenter");
     if (cc) setVisibleCC(cc.visible = !cc.visible);
-  }
-
-  const poweroff = () => {
-    Confirm.get_default().startConfirm({
-      icon: "\uE3DA",
-      iconStyle: "Error",
-      title: "Shut down?",
-      summary: "Are you sure you want to power off?",
-      actions: [
-        {
-          label: "Cancel",
-          style: "Regular",
-          onClicked: close => close(),
-        },
-        {
-          label: "Confirm",
-          style: "Error",
-          onClicked: close => {
-            execAsync(["systemctl", "poweroff"]);
-            close();
-          },
-        },
-      ],
-    });
   }
 
   return (

@@ -114,7 +114,7 @@ function CardContent({ blurredArt }: { blurredArt: Accessor<string> }) {
           >
             <label
               halign={Gtk.Align.START}
-              label={trackTitle(t => maxLength(t, 27))}
+              label={trackTitle(t => maxLength(t, 25))}
               class="Title"
             />
             <label

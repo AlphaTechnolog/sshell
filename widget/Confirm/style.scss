@@ -55,16 +55,42 @@
           border-right: solid $contrast2 1px;
           font-size: 13px;
           transition: all ease .2s;
+
           &.Primary { color: $accent; }
-          &.Error { color: $red; }
-          &.Warning { color: $yellow; }
-          &.Success { color: $green; }
           &:hover { background-color: $contrast2; }
           &:nth-child(1) { border-bottom-left-radius: 12px; }
+
           &:nth-last-child(1) {
             border-bottom-right-radius: 12px;
             border-right: none;
           }
+
+          @mixin with-style($classname, $color) {
+            &.#{$classname} {
+              color: $color;
+              &:hover { background-color: rgba($color, 0.1); }
+            }
+          }
+
+          @include with-style("Error", $red);
+          @include with-style("Warning", $yellow);
+          @include with-style("Success", $green);
+        }
+      }
+
+      .CloseButton {
+        font-family: $font-icons;
+        font-weight: bold;
+        font-size: 14px;
+        border-radius: 7px;
+        padding: 6px;
+        transition: all ease .2s;
+        color: $foreground;
+        background-color: transparent;
+
+        &:hover {
+          color: $light_red;
+          background-color: rgba($light_red, 0.15);
         }
       }
     }
