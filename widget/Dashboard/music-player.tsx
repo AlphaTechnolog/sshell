@@ -223,7 +223,7 @@ export default function MusicPlayer() {
       await execAsync(cmd);
       setBlurredArt(`${dirname}/${filename}`);
     } catch (err) {
-      console.log({ err });
+      console.log("unable to update blurred art:", err);
       setBlurredArt(image);
     }
   }

@@ -7,6 +7,7 @@ import OSD from "./widget/OSD";
 import Notifications from "./widget/Notifications";
 import ControlCenter from "./widget/ControlCenter";
 import Confirm from "./widget/Confirm";
+import KBDLayout from "./widget/KBDLayout";
 
 import "./daemons";
 
@@ -20,6 +21,7 @@ app.start({
       ControlCenter(mon);
       if (isPrimary) {
         OSD(mon);
+        KBDLayout(mon);
         Notifications(mon);
         Confirm(mon);
       }

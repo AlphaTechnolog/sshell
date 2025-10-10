@@ -5,6 +5,7 @@
 @use "./widget/common/style.scss" as common;
 @use "./widget/ControlCenter/style.scss" as controlCenter;
 @use "./widget/Confirm/style.scss" as confirmPopup;
+@use "./widget/KBDLayout/style.scss" as kbdLayoutOSD;
 
 * {
   all: unset;

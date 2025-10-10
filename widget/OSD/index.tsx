@@ -1,6 +1,6 @@
 import app from "ags/gtk4/app";
 import { Gtk, Gdk, Astal } from "ags/gtk4";
-import { createBinding, createComputed, createState, type Accessor, type Setter } from "gnim";
+import { createBinding, createComputed, createState, onCleanup, type Accessor, type Setter } from "gnim";
 
 import Wp from "gi://AstalWp";
 import { Brightness } from "../../services";
@@ -38,7 +38,7 @@ function OnScreenProgress({ visible, setVisible }: OnScreenProgressProps) {
     });
   }
 
-  visible.subscribe(() => {
+  const disposeVisible = visible.subscribe(() => {
     if (visible.get() === false) {
       timeout(REVEAL_TIMEOUT, () => {
         setShown(visible.get());
@@ -50,8 +50,13 @@ function OnScreenProgress({ visible, setVisible }: OnScreenProgressProps) {
     show(screenBrightness.get(), "display-brightness-symbolic");
   });
 
-  volume.subscribe(() => {
+  const disposeVolume = volume.subscribe(() => {
     show(volume.get(), volumeIcon.get());
+  });
+
+  onCleanup(() => {
+    disposeVisible();
+    disposeVolume();
   });
 
   return (
