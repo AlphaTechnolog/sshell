@@ -41,7 +41,7 @@ window.ControlCenter {
         &:hover { background-color: $contrast2; }
       }
 
-      .PoweroffButton, .LockButton {
+      .ScreenshotIcon, .PoweroffButton, .LockButton {
         background-color: $contrast1;
         border-radius: 10px;
         font-size: 18px;
@@ -60,6 +60,7 @@ window.ControlCenter {
           }
         }
 
+        @include beautiful-hover("ScreenshotIcon", $cyan);
         @include beautiful-hover("LockButton", $blue);
         @include beautiful-hover("PoweroffButton", $red);
       }

@@ -152,6 +152,7 @@ function DndChip() {
 function DarkModeChip() {
   const theme = Theme.get_default();
   const activeTheme = createBinding(theme, "colorscheme");
+
   const icon = createComputed([activeTheme], (t) => {
     switch (t) {
       case ActiveThemes.dark: return "\uE53E";
@@ -160,8 +161,12 @@ function DarkModeChip() {
     }
   });
 
+  const isActive = createComputed([activeTheme], (t) => {
+    return t === ActiveThemes.dark;
+  });
+
   const toggleTheme = () => {
-    if (activeTheme.get() === ActiveThemes.dark) {
+    if (isActive.get()) {
       theme.colorscheme = ActiveThemes.light;
     } else {
       theme.colorscheme = ActiveThemes.dark;
@@ -172,8 +177,8 @@ function DarkModeChip() {
     <Chip
       icon={icon}
       label="Dark mode"
-      summary="Enabled"
-      active={activeTheme(a => a === ActiveThemes.dark)}
+      summary={isActive(a => a ? "Enabled" : "Disabled")}
+      active={isActive}
       showChevronRight={false}
       onToggle={toggleTheme}
     />

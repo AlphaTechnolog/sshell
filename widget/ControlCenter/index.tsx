@@ -65,14 +65,20 @@ function Header() {
           onClicked={() => console.log('TODO')}
         />
         <button
+          class="PoweroffButton"
+          label={"\uE3DA"}
+          valign={Gtk.Align.CENTER}
+          onClicked={() => console.log("TODO")}
+        />
+        <button
           class="LockButton"
           label={"\uE308"}
           valign={Gtk.Align.CENTER}
           onClicked={() => console.log("TODO")}
         />
         <button
-          class="PoweroffButton"
-          label={"\uE3DA"}
+          class="ScreenshotIcon"
+          label={"\uE1D4"}
           valign={Gtk.Align.CENTER}
           onClicked={() => console.log("TODO")}
         />

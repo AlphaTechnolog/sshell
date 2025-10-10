@@ -15,8 +15,8 @@ export type ActiveTheme = typeof ActiveThemes[keyof typeof ActiveThemes];
 const palettes = {
   [ActiveThemes.dark]: {
     ["light_mode"]: "false",
-    ["background"]: "#000000",
-    ["solid-bg"]: "#0f0f0f",
+    ["background"]: "#0a0a0a",
+    ["solid-bg"]: "#0a0a0a",
     ["foreground"]: "#cdcdcd",
     ["black"]: "#242424",
     ["red"]: "#d8647e",
@@ -34,14 +34,14 @@ const palettes = {
     ["light_magenta"]: "#c9b1ca",
     ["light_cyan"]: "#bebeda",
     ["light_white"]: "#d7d7d7",
-    ["general-opacity"]: "0.85",
+    ["general-opacity"]: "1",
     ["contrast1"]: "rgba(#ffffff, 0.05)",
     ["contrast2"]: "rgba(#ffffff, 0.1)",
     ["contrastfg"]: "rgba(#ffffff, 0.35)",
     ["font-regular"]: "Inter",
     ["font-icons"]: "Phosphor",
     ["font-nf"]: "JetBrainsMono Nerd Font",
-    ["accent"]: "$light_magenta",
+    ["accent"]: "$light_blue",
     ["accent2"]: "$light_yellow",
     ["tinted-white"]: "color.mix($accent, $white, 50%)",
     ["tinted-white-2"]: "color.mix($accent, $white, 75%)",
@@ -150,7 +150,7 @@ export class Theme extends GObject.Object {
   }
 
   // TODO: This part will be really problematic in nixos if you
-  // get too purist about immutability, the correct way would
+  // get too purist about immutability, the correct way would be to
   // have some arbitrary compiled css file somewhere, load it
   // from the shell, rebuild it here, and use that in app.js so
   // even a bundled sshell will be able to reload, but idk first arch.

@@ -1,6 +1,6 @@
 import app from "ags/gtk4/app";
 import { Gtk, Gdk, Astal } from "ags/gtk4";
-import { createBinding, createState, For, Node } from "gnim";
+import { createBinding, createState, For, Node, onCleanup } from "gnim";
 
 import Notifd from "gi://AstalNotifd";
 import { Dnd } from "../../services";
@@ -195,14 +195,19 @@ export default function Notifications(gdkmonitor: Gdk.Monitor) {
     remove(id);
   });
 
-  notifications.subscribe(() => {
+  const disposeNotifs = notifications.subscribe(() => {
     setVisible(notifications.get().length > 0);
   });
 
   // visible is a terrible hack for some reason gtk won't stop
   // showing after the last notification gets closed if i use visible={visible}
-  visible.subscribe(() => {
+  const disposeVisible = visible.subscribe(() => {
     app.toggle_window("NotificationsPopup");
+  });
+
+  onCleanup(() => {
+    disposeNotifs();
+    disposeVisible();
   });
 
   return (
