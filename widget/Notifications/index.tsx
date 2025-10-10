@@ -8,6 +8,7 @@ import { Dnd } from "../../services";
 import { S_PER_MS } from "../../constants";
 import { timeout } from "ags/time";
 import { clamp, maxLength } from "../../utils";
+import Pango10 from "gi://Pango";
 
 type NotifProps = {
   notif: Notifd.Notification,
@@ -119,18 +120,23 @@ function Notification({ notif: n, remove }: NotifProps) {
             class="NotifInfo"
           >
             <label
-              label={maxLength(n.summary, 30)}
+              label={n.summary}
+              wrap
+              wrapMode={Pango10.WrapMode.CHAR}
+              maxWidthChars={30}
               class="Summary"
               hexpand
               halign={Gtk.Align.START}
             />
             {n.summary !== n.body && n.body.length > 0 && (
               <label
-                label={maxLength(n.body, 40)}
+                label={n.body}
                 class="Body"
                 hexpand
                 halign={Gtk.Align.START}
                 wrap
+                wrapMode={Pango10.WrapMode.CHAR}
+                maxWidthChars={40}
                 useMarkup
               />
             )}

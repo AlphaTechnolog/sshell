@@ -3,9 +3,9 @@ import { createBinding, createComputed, createState } from "gnim";
 import { Gtk } from "ags/gtk4";
 
 import Wp from "gi://AstalWp";
-import { Dnd } from "../../services";
+import { Confirm, Dnd } from "../../services";
 
-import { exec } from "ags/process";
+import { exec, execAsync } from "ags/process";
 import { clamp } from "../../utils/math";
 
 import MusicIndicator from "./music-indicator";
@@ -64,6 +64,30 @@ export default function Actions(args: { $type: string; }) {
     if (cc) setVisibleCC(cc.visible = !cc.visible);
   }
 
+  const poweroff = () => {
+    Confirm.get_default().startConfirm({
+      icon: "\uE3DA",
+      iconStyle: "Error",
+      title: "Shut down?",
+      summary: "Are you sure you want to power off?",
+      actions: [
+        {
+          label: "Cancel",
+          style: "Regular",
+          onClicked: close => close(),
+        },
+        {
+          label: "Confirm",
+          style: "Error",
+          onClicked: close => {
+            execAsync(["systemctl", "poweroff"]);
+            close();
+          },
+        },
+      ],
+    });
+  }
+
   return (
     <box {...args} spacing={6} class="Actions">
       <MusicIndicator />
@@ -80,6 +104,7 @@ export default function Actions(args: { $type: string; }) {
       <button
         class="Poweroff"
         iconName="system-shutdown"
+        onClicked={poweroff}
       />
     </box>
   );

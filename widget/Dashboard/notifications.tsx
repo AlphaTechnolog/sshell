@@ -4,6 +4,7 @@ import { createBinding, createComputed, createState, For, With } from "gnim";
 import Notifd from "gi://AstalNotifd";
 import { clamp, maxLength } from "../../utils";
 import { S_PER_MS } from "../../constants";
+import Pango10 from "gi://Pango";
 
 const notifd = Notifd.get_default();
 
@@ -106,7 +107,10 @@ function NotifItem({ notif: n }: { notif: Notifd.Notification }) {
             class="NotifInfo"
           >
             <label
-              label={maxLength(n.summary, 45)}
+              label={n.summary}
+              wrap
+              wrapMode={Pango10.WrapMode.CHAR}
+              maxWidthChars={35}
               class="Summary"
               hexpand
               halign={Gtk.Align.START}
@@ -118,6 +122,7 @@ function NotifItem({ notif: n }: { notif: Notifd.Notification }) {
                 hexpand
                 halign={Gtk.Align.START}
                 wrap
+                wrapMode={Pango10.WrapMode.CHAR}
                 useMarkup
               />
             )}
@@ -163,7 +168,7 @@ function NoNotifications() {
       />
       <label
         class="Title"
-        label="Nothing here yet" 
+        label="Nothing here yet"
         halign={Gtk.Align.CENTER}
         valign={Gtk.Align.CENTER}
       />

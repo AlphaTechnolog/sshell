@@ -17,7 +17,7 @@ function WorkspaceButton({ wsid }: { wsid: number }) {
   }
 
   function updateOccupied(self: Gtk.Button) {
-    const occupied = clients.get()?.some(c => c.workspace.id === wsid);
+    const occupied = clients.get()?.some(c => c.workspace?.id === wsid);
     const hasClass = self.has_css_class("Occupied");
     if (!hasClass && occupied) self.add_css_class("Occupied");
     else if (!occupied && hasClass) self.remove_css_class("Occupied");

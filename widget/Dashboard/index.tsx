@@ -56,7 +56,6 @@ function UserContainer() {
     console.log("handleLockPC");
   }
 
-  // TODO
   function handlePoweroffPC() {
     console.log("handlePoweroffPC");
   }

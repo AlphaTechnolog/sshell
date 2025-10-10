@@ -6,6 +6,7 @@ import Dashboard from "./widget/Dashboard";
 import OSD from "./widget/OSD";
 import Notifications from "./widget/Notifications";
 import ControlCenter from "./widget/ControlCenter";
+import Confirm from "./widget/Confirm";
 
 app.start({
   css: style,
@@ -18,6 +19,7 @@ app.start({
       if (isPrimary) {
         OSD(mon);
         Notifications(mon);
+        Confirm(mon);
       }
     });
   },

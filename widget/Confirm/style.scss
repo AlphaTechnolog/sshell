@@ -1,0 +1,72 @@
+@use "../../theme.scss" as *;
+
+.Confirm {
+  background-color: transparent;
+
+  .BackgroundOverlay {
+    background-color: rgba(#000000, 0.25);
+
+    .Card {
+      background-color: $background;
+      color: $foreground;
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: $font-regular;
+      box-shadow:  0px 0px 26px 5px rgba(0,0,0,0.05);
+
+      .Header {
+        padding: 16px 0px;
+
+        .IconContainer {
+          border-radius: 100px;
+          border: solid $black 2px;
+          padding: 2px;
+
+          .Icon {
+            background-color: $accent;
+            color: $background;
+            border-radius: 100px;
+            font-family: $font-icons;
+            font-size: 28px;
+            padding: 12px;
+
+            &.Error { background-color: $red; }
+            &.Warning { background-color: $yellow; }
+            &.Success { background-color: $green; }
+          }
+        }
+      }
+
+      .ContentContainer {
+        padding: 0px 12px;
+
+        .Title {
+          font-size: 20px;
+          font-weight: 500;
+        }
+      }
+
+      .FooterContainer {
+        @if $light_mode { border-top: solid 1px $contrast2; }
+
+        button {
+          padding: 12px 0px;
+          background-color: $contrast1;
+          border-right: solid $contrast2 1px;
+          font-size: 13px;
+          transition: all ease .2s;
+          &.Primary { color: $accent; }
+          &.Error { color: $red; }
+          &.Warning { color: $yellow; }
+          &.Success { color: $green; }
+          &:hover { background-color: $contrast2; }
+          &:nth-child(1) { border-bottom-left-radius: 12px; }
+          &:nth-last-child(1) {
+            border-bottom-right-radius: 12px;
+            border-right: none;
+          }
+        }
+      }
+    }
+  }
+}
