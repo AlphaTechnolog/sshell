@@ -112,7 +112,7 @@ function NetworkChip() {
 
   const handleToggle = () => {
     if (primary.get() === Network.Primary.WIFI) {
-      // TODO: Do toggle
+      // TODO: Implement wifi module (i have no wifi atm)
       execAsync("nmcli radio wifi off");
     }
   };
