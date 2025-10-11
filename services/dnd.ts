@@ -1,6 +1,7 @@
-import { monitorFile, readFile, readFileAsync, writeFile, writeFileAsync } from "ags/file";
 import GLib from "gi://GLib";
 import GObject, { register, getter, setter } from "gnim/gobject";
+import { monitorFile, readFileAsync, writeFileAsync } from "ags/file";
+import { readFileCreate } from "../utils";
 
 @register({ GTypeName: "Dnd" })
 export class Dnd extends GObject.Object {
@@ -13,7 +14,7 @@ export class Dnd extends GObject.Object {
   private static YES = "yes";
   private static NO = "no";
 
-  #enabled = readFile(Dnd.CACHE_FILE) === Dnd.YES;
+  #enabled = readFileCreate(Dnd.CACHE_FILE) === Dnd.YES;
 
   @getter(Boolean)
   get enabled() { return this.#enabled; }

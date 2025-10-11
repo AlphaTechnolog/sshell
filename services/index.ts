@@ -6,3 +6,4 @@ export * from "./system-stats";
 export * from "./theme";
 export * from "./confirm-service";
 export * from "./weather";
+export * from "./hyprsunset";

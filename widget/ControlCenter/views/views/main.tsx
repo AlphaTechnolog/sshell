@@ -5,7 +5,7 @@ import { createBinding, createComputed, createState, For, With, type Accessor } 
 
 import Hyprland from "gi://AstalHyprland";
 import Network from "gi://AstalNetwork";
-import { Dnd, Theme, ActiveThemes } from "../../../../services";
+import { Dnd, Theme, ActiveThemes, Hyprsunset } from "../../../../services";
 import { useNetworkIcon } from "../../../../hooks";
 import { exec, execAsync } from "ags/process";
 import { ControlSliders } from "../../../common";
@@ -185,6 +185,22 @@ function DarkModeChip() {
   );
 }
 
+function HyprsunsetChip() {
+  const hyprsunset = Hyprsunset.get_default();
+  const isRunning = createBinding(hyprsunset, "is_running");
+
+  return (
+    <Chip
+      icon={"\uE2DC"}
+      label="Hyprsunset"
+      summary={isRunning(r => `Night light is ${r ? "on" : "off"}`)}
+      showChevronRight={false}
+      active={isRunning}
+      onToggle={() => hyprsunset.toggle()}
+    />
+  )
+}
+
 function Chips() {
   return (
     <box vexpand hexpand orientation={Gtk.Orientation.VERTICAL} homogeneous spacing={12}>
@@ -194,12 +210,7 @@ function Chips() {
       </box>
       <box hexpand valign={Gtk.Align.CENTER} vexpand orientation={Gtk.Orientation.HORIZONTAL} homogeneous spacing={12}>
         <DarkModeChip />
-        <Chip
-          icon={"\uE2DC"}
-          label="Redshift"
-          summary="Night Light is Off"
-          showChevronRight={false}
-        />
+        <HyprsunsetChip />
       </box>
     </box>
   );
