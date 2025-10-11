@@ -54,5 +54,21 @@
         padding-right: 2px;
       }
     }
+
+    .RetryButton {
+      background-color: $contrast1;
+      border-radius: 7px;
+      padding: 8px 12px;
+      .RetryButtonIcon {
+        font-family: $font-icons;
+        font-size: 16px;
+        color: utils.adjust-color($color: $light_black, $lightness: 25%);
+      }
+      .RetryButtonLabel {
+        font-family: $font-regular;
+        font-size: 13px;
+        font-weight: 500;
+      }
+    }
   }
 }

@@ -13,62 +13,33 @@ const icons = {
   },
 };
 
-const SUNRISE = '2025-10-10T06:00:00.000Z'; // 06:00 AM
-const SUNSET = '2025-10-10T18:00:00.000Z'; // 06:00 PM
-
-const isCurrentDateSunUp = () => {
+const isCurrentDateSunUp = (): boolean => {
   const now = new Date();
-  const sunriseDate = new Date(SUNRISE);
-  const sunsetDate = new Date(SUNSET);
-  const nowMinutes = now.getHours() * 60 + now.getMinutes();
-  const sunriseMinutes = sunriseDate.getHours() * 60 + sunriseDate.getMinutes();
-  const sunsetMinutes = sunsetDate.getHours() * 60 + sunsetDate.getMinutes();
-  return nowMinutes > sunriseMinutes && nowMinutes < sunsetMinutes;
+  const hour24 = now.getHours();
+  const SUNRISE_HOUR = 6;
+  const SUNSET_HOUR = 18;
+  return hour24 >= SUNRISE_HOUR && hour24 < SUNSET_HOUR;
 }
 
-const isSunUp = (targetTimeString: string) => {
-  const now = new Date();
+const isSunUp = (targetTimeString: string): boolean => {
   const [timeValue, ampm] = targetTimeString.toUpperCase().split(" ");
-  let hour = parseInt(timeValue, 10);
+  let hour24 = parseInt(timeValue, 10);
 
-  if (ampm === "PM" && hour !== 12) {
-    hour += 12;
-  } else if (ampm === "AM" && hour === 12) {
-    hour = 0;
+  if (ampm === "PM" && hour24 !== 12) {
+    hour24 += 12;
+  } else if (ampm === "AM" && hour24 === 12) {
+    hour24 = 0;
   }
 
-  const targetDate = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    hour,
-    0,
-    0,
-    0
-  );
+  const SUNRISE_HOUR = 6;
+  const SUNSET_HOUR = 18;
 
-  const sunriseSource = new Date(SUNRISE);
-  const sunsetSource = new Date(SUNSET);
-
-  const sunriseDate = new Date(targetDate);
-  sunriseDate.setHours(sunriseSource.getHours());
-  sunriseDate.setMinutes(sunriseSource.getMinutes());
-  sunriseDate.setSeconds(sunriseSource.getSeconds());
-
-  const sunsetDate = new Date(targetDate);
-  sunsetDate.setHours(sunsetSource.getHours());
-  sunsetDate.setMinutes(sunsetSource.getMinutes());
-  sunsetDate.setSeconds(sunsetSource.getSeconds());
-
-  const targetTimeMs = targetDate.getTime();
-  const sunriseTimeMs = sunriseDate.getTime();
-  const sunsetTimeMs = sunsetDate.getTime();
-
-  return targetTimeMs > sunriseTimeMs && targetTimeMs < sunsetTimeMs;
+  return hour24 >= SUNRISE_HOUR && hour24 < SUNSET_HOUR;
 }
 
 function PredictionItem({ prediction }: { prediction: HourlyForecastItem }) {
   const icon = icons[prediction.isCloudy ? "cloudy" : "regular"][isSunUp(prediction.time) ? "sun" : "moon"];
+
   return (
     <box
       orientation={Gtk.Orientation.VERTICAL}
@@ -112,6 +83,7 @@ export function Weather() {
   const currentTemp = createBinding(weather, "current_temp");
   const feelsLike = createBinding(weather, "feels_like");
   const hourlyForecast = createBinding(weather, "hourly_forecast");
+  const failed = createBinding(weather, "failed");
 
   const icon = createComputed([isCloudy], cloudy => {
     return icons[cloudy ? "cloudy" : "regular"][isCurrentDateSunUp() ? "sun" : "moon"];
@@ -128,124 +100,127 @@ export function Weather() {
         hexpand
         vexpand
         class="ContentContainer"
-        orientation={Gtk.Orientation.VERTICAL}
       >
-        <centerbox
-          hexpand
-          vexpand
-          valign={Gtk.Align.START}
-          class="Header"
-        >
-          <box
-            $type="start"
-            vexpand
-            hexpand
-          >
-            <label
-              label={icon}
-              vexpand
-              valign={Gtk.Align.CENTER}
+        <overlay>
+          <box vexpand hexpand orientation={Gtk.Orientation.VERTICAL}>
+            <centerbox
               hexpand
-              halign={Gtk.Align.START}
-              class="OverviewIcon"
-            />
-          </box>
-          <box
-            $type="center"
-            vexpand
-            hexpand
-          >
-            <box
-              marginStart={12}
-              orientation={Gtk.Orientation.VERTICAL}
               vexpand
-              hexpand
+              valign={Gtk.Align.START}
+              class="Header"
             >
-              <label
-                label={title}
+              <box
+                $type="start"
                 vexpand
-                valign={Gtk.Align.CENTER}
                 hexpand
-                halign={Gtk.Align.START}
-                class="OverviewTitle"
-              />
-              <label
-                label={humidity(h => `Humidity: ${h}`)}
-                class="Humidity"
+              >
+                <label
+                  label={icon}
+                  vexpand
+                  valign={Gtk.Align.CENTER}
+                  hexpand
+                  halign={Gtk.Align.START}
+                  class="OverviewIcon"
+                />
+              </box>
+              <box
+                $type="center"
                 vexpand
-                valign={Gtk.Align.CENTER}
                 hexpand
-                halign={Gtk.Align.START}
-              />
-            </box>
-          </box>
-          <box
-            $type="end"
-            vexpand
-            hexpand
-          >
+              >
+                <box
+                  marginStart={12}
+                  orientation={Gtk.Orientation.VERTICAL}
+                  vexpand
+                  hexpand
+                >
+                  <label
+                    label={title}
+                    vexpand
+                    valign={Gtk.Align.CENTER}
+                    hexpand
+                    halign={Gtk.Align.START}
+                    class="OverviewTitle"
+                  />
+                  <label
+                    label={humidity(h => `Humidity: ${h}`)}
+                    class="Humidity"
+                    vexpand
+                    valign={Gtk.Align.CENTER}
+                    hexpand
+                    halign={Gtk.Align.START}
+                  />
+                </box>
+              </box>
+              <box
+                $type="end"
+                vexpand
+                hexpand
+              >
+                <label
+                  label={currentTemp}
+                  vexpand
+                  valign={Gtk.Align.CENTER}
+                  hexpand
+                  halign={Gtk.Align.END}
+                  class="Temperature"
+                />
+              </box>
+            </centerbox>
             <label
-              label={currentTemp}
-              vexpand
-              valign={Gtk.Align.CENTER}
               hexpand
               halign={Gtk.Align.END}
-              class="Temperature"
+              vexpand
+              valign={Gtk.Align.START}
+              label={feelsLike(value => `Feels like: ${value}`)}
+              class="FeelsLike"
             />
-          </box>
-        </centerbox>
-        <label
-          hexpand
-          halign={Gtk.Align.END}
-          vexpand
-          valign={Gtk.Align.START}
-          label={feelsLike(value => `Feels like: ${value}`)}
-          class="FeelsLike"
-        />
-        <box
-          marginTop={12}
-          heightRequest={60}
-          hexpand
-          orientation={Gtk.Orientation.HORIZONTAL}
-          homogeneous
-          class="PredictionsContainer"
-        >
-          <For each={hourlyForecast}>
-            {prediction => <PredictionItem prediction={prediction} />}
-          </For>
-          {/*{Array.from({ length: 6 }).map(() => (
             <box
-              orientation={Gtk.Orientation.VERTICAL}
-              spacing={2}
-              class="PredictionItem"
+              marginTop={12}
+              heightRequest={60}
+              hexpand
+              orientation={Gtk.Orientation.HORIZONTAL}
+              homogeneous
+              class="PredictionsContainer"
             >
-              <label
-                hexpand
-                halign={Gtk.Align.CENTER}
-                vexpand
-                valign={Gtk.Align.CENTER}
-                label="03AM"
-                class="Hour"
-              />
-              <label
-                hexpand
-                halign={Gtk.Align.CENTER}
-                vexpand
-                valign={Gtk.Align.CENTER}
-                label={icons.regular.sun}
-                class="Icon"
-              />
-              <label
-                hexpand
-                halign={Gtk.Align.CENTER}
-                vexpand
-                valign={Gtk.Align.CENTER}
-                label="19°"
-                class="Temperature"
-              />
+              <For each={hourlyForecast}>
+                {prediction => <PredictionItem prediction={prediction} />}
+              </For>
             </box>
-          ))}*/}
-        </box>
+          </box>
+          <box
+            $type="overlay"
+            vexpand
+            hexpand
+            halign={Gtk.Align.END}
+            valign={Gtk.Align.END}
+            visible={failed}
+          >
+            <button
+              class="RetryButton"
+              vexpand
+              hexpand
+              halign={Gtk.Align.CENTER}
+              valign={Gtk.Align.CENTER}
+              onClicked={() => weather.fetchWeatherData()}
+            >
+              <box vexpand hexpand orientation={Gtk.Orientation.HORIZONTAL} spacing={7}>
+                <label
+                  class="RetryButtonIcon"
+                  vexpand
+                  valign={Gtk.Align.CENTER}
+                  label={"\uE20C"}
+                />
+                <label
+                  class="RetryButtonLabel"
+                  vexpand
+                  valign={Gtk.Align.CENTER}
+                  label="Try again"
+                />
+              </box>
+            </button>
+          </box>
+        </overlay>
       </box>
     </box>
   )

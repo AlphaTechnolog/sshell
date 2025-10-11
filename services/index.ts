@@ -7,3 +7,4 @@ export * from "./theme";
 export * from "./confirm-service";
 export * from "./weather";
 export * from "./hyprsunset";
+export * from "./lockscreen";

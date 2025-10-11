@@ -41,7 +41,7 @@ const palettes = {
     ["font-regular"]: "Inter",
     ["font-icons"]: "Phosphor",
     ["font-nf"]: "JetBrainsMono Nerd Font",
-    ["accent"]: "$light_blue",
+    ["accent"]: "$light_red",
     ["accent2"]: "$light_yellow",
     ["tinted-white"]: "color.mix($accent, $white, 50%)",
     ["tinted-white-2"]: "color.mix($accent, $white, 75%)",

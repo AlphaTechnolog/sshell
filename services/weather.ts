@@ -29,6 +29,7 @@ export class Weather extends GObject.Object {
   #currentTemp = "0°";
   #feelsLike = "0°";
   #hourlyForecast: HourlyForecastItem[] = [];
+  #failed = false;
 
   @getter(Boolean)
   get fetching() { return this.#fetching; }
@@ -51,9 +52,12 @@ export class Weather extends GObject.Object {
   @getter(Array)
   get hourly_forecast() { return this.#hourlyForecast; }
 
+  @getter(Boolean)
+  get failed() { return this.#failed; }
+
   constructor() {
     super();
-    interval(30 * MIN_PER_MS, () => this.#fetchWeatherData());
+    interval(30 * MIN_PER_MS, () => this.fetchWeatherData());
   }
 
   #isCloudyCode(code: number): boolean {
@@ -61,6 +65,11 @@ export class Weather extends GObject.Object {
     // Codes 45-48 (Fog/Rime) have low visibility and are visually "cloudy."
     // Codes 51+ (Precipitation) also require cloud cover.
     return code >= 2;
+  }
+
+  #setFailed(failed: boolean) {
+    this.#failed = failed;
+    this.notify("failed");
   }
 
   async #getApproximateLocation(): Promise<GeoLocation> {
@@ -74,6 +83,7 @@ export class Weather extends GObject.Object {
         timezone: data.timezone,
       };
     } catch (err) {
+      this.#setFailed(true);
       console.error(
         "error during geoip lookup. Falling back to default location (London)."
       );
@@ -96,7 +106,9 @@ export class Weather extends GObject.Object {
     return newUrl;
   }
 
-  async #fetchWeatherData() {
+  async fetchWeatherData() {
+    this.#setFailed(false);
+
     const { lat, lon, timezone } = await this.#getApproximateLocation();
 
     const url = this.#urlWithParams("https://api.open-meteo.com/v1/forecast", {
@@ -168,20 +180,17 @@ export class Weather extends GObject.Object {
       this.#currentTemp = `${currentTemp}°`
       this.#feelsLike = `${feelsLike}°`;
       this.#hourlyForecast = hourlyForecast;
-
-      [
-        "is_cloudy",
-        "title",
-        "humidity",
-        "current_temp",
-        "feels_like",
-        "hourly_forecast",
-      ].forEach(x => this.notify(x));
-
       this.#fetching = false;
+      this.notify("is_cloudy");
+      this.notify("title");
+      this.notify("humidity");
+      this.notify("current_temp");
+      this.notify("feels_like");
+      this.notify("hourly_forecast");
       this.notify("fetching");
     } catch (err) {
       console.error("Failed to retrieve weather data:", err);
+      this.#setFailed(true);
     }
   }
 }

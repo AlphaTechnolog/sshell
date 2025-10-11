@@ -37,8 +37,13 @@ export class Hyprsunset extends GObject.Object {
   }
 
   spawn() {
-    execAsync(["hyprsunset", "--temperature", HYPRSUNSET_TEMPERATURE]);
+    execAsync(["hyprsunset", "--temperature", HYPRSUNSET_TEMPERATURE]).catch(err => {
+      // this will complain in the terminal because killall is killing it, but it is just
+      // ok to ignore so yeah.
+      console.error("Unable to spawn hyprsunset", err);
+    });
     this.#setIsRunning(true);
+    return Promise.resolve();
   }
 
   async #isRunningProcess() {

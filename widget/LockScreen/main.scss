@@ -1,0 +1,11 @@
+.LockscreenContainer {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: $foreground;
+
+  label {
+    font-size: 64px;
+    font-weight: 500;
+  }
+}
