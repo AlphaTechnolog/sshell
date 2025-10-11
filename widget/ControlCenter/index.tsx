@@ -6,8 +6,11 @@ import { User } from "../../services";
 import { Body } from "./views";
 import { CircularProgress } from "../common/circular-progress";
 import { SystemStats } from "../../services/system-stats";
+import { usePoweroff } from "../../hooks";
 
 function Header() {
+  const { poweroff } = usePoweroff();
+
   const user = User.get_default();
   const stats = SystemStats.get_default();
 
@@ -68,7 +71,7 @@ function Header() {
           class="PoweroffButton"
           label={"\uE3DA"}
           valign={Gtk.Align.CENTER}
-          onClicked={() => console.log("TODO")}
+          onClicked={poweroff}
         />
         <button
           class="LockButton"

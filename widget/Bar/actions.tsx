@@ -10,7 +10,7 @@ import { clamp } from "../../utils/math";
 
 import MusicIndicator from "./music-indicator";
 import { useNetworkIcon } from "../../hooks";
-import { usePoweroff } from "../../utils/use-poweroff";
+import { usePoweroff } from "../../hooks";
 
 const wp = Wp.get_default();
 

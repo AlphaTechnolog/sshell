@@ -1,16 +1,17 @@
 import app from "ags/gtk4/app";
 import GLib from "gi://GLib?version=2.0";
 import { Astal, Gdk, Gtk } from "ags/gtk4";
-import { createBinding, createState, With } from "gnim";
+import { createBinding, createComputed, createState, With } from "gnim";
 import { createPoll } from "ags/time";
 import { fileExists } from "../../utils/fs";
 import { S_PER_MS } from "../../constants";
 
 import MusicPlayer from "./music-player";
 import Notifications from "./notifications";
-import { Uptime } from "../../services/";
+import { Uptime, User } from "../../services/";
 import { capitalize } from "../../utils";
 import { Weather } from "../common";
+import { usePoweroff } from "../../hooks";
 
 function Clock() {
   const contents = createPoll("00:00", 1 * S_PER_MS, "date '+%H:%M'")
@@ -32,32 +33,18 @@ function Clock() {
 
 function UserContainer() {
   const uptime = Uptime.get_default();
+  const user = User.get_default();
+
+  const pfp = createBinding(user, "pfp");
+  const hasPfp = createBinding(user, "has_pfp");
+  const whoami = createBinding(user, "whoami");
   const fmttedUptime = createBinding(uptime, "formatted");
-  const whoami = GLib.getenv("USER") ?? "nobody";
-  const [faceUrl, setFaceUrl] = createState<string | undefined>(undefined);
 
-  // FIXME: We could extract this to a service
-  async function getData() {
-    const home = GLib.getenv("HOME") ?? "/home/" + whoami;
-    const pfpPath = `${home}/.face`;
-    for (const x of [".png", ".jpg"]) {
-      const v = pfpPath.concat(x);
-      if (await fileExists(v)) {
-        setFaceUrl(v);
-        break;
-      }
-    }
-  }
-
-  getData();
+  const { poweroff } = usePoweroff();
 
   // TODO
   function handleLockPC() {
     console.log("handleLockPC");
-  }
-
-  function handlePoweroffPC() {
-    console.log("handlePoweroffPC");
   }
 
   return (
@@ -73,10 +60,10 @@ function UserContainer() {
       >
         <box class="ImageContainer" halign={Gtk.Align.START}>
           <overlay hexpand={false} vexpand={false}>
-            <With value={faceUrl}>
+            <With value={hasPfp}>
               {(value) => value ? (
                 <box
-                  css={faceUrl(u => `background-image: url('file://${u!}')`)}
+                  css={pfp(p => `background-image: url('file://${p!}')`)}
                   class="UserPfp"
                   widthRequest={70}
                   heightRequest={70}
@@ -125,7 +112,7 @@ function UserContainer() {
           spacing={2}
         >
           <label
-            label={capitalize(whoami)}
+            label={whoami(w => capitalize(w))}
             hexpand
             halign={Gtk.Align.START}
             class="Whoami"
@@ -159,7 +146,7 @@ function UserContainer() {
         </button>
         <button
           class="SystemActionButton PoweroffButton"
-          onClicked={handlePoweroffPC}
+          onClicked={() => poweroff()}
           vexpand
           hexpand
           halign={Gtk.Align.CENTER}

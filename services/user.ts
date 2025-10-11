@@ -1,6 +1,6 @@
-import GLib from "gi://GLib";
 import GObject, { register, getter } from "gnim/gobject";
-import Gio from "gi://Gio?version=2.0";
+import GLib from "gi://GLib";
+import { exec } from "ags/process";
 
 const home = () => GLib.get_home_dir();
 
@@ -14,8 +14,13 @@ export class User extends GObject.Object {
   private static PFP_PATH = `${home()}/.face`;
   private static PFP_EXTS = [".png", ".jpg", ".jpeg"];
 
+  @getter(String)
+  get whoami() {
+    return GLib.getenv("USER") ?? exec("whoami");
+  }
+
   @getter(Boolean)
-  get hasPfp(): boolean {
+  get has_pfp(): boolean {
     return this.pfp.length > 0;
   }
 
