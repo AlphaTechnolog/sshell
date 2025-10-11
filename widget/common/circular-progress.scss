@@ -1,0 +1,11 @@
+@use "../../theme.scss" as *;
+
+@define-color ags-cprgs-trough-color #{$black};
+@define-color ags-cprgs-default-active-color #{$tinted-white};
+@define-color ags-cprgs-cpu-active-color #{$light_yellow};
+@define-color ags-cprgs-ram-active-color #{$light_magenta};
+
+.CircularProgress {
+  padding: 0;
+  margin: 0;
+}

@@ -10,7 +10,7 @@ import MusicPlayer from "./music-player";
 import Notifications from "./notifications";
 import { Uptime } from "../../services/";
 import { capitalize } from "../../utils";
-import { ControlSliders } from "../common";
+import { Weather } from "../common";
 
 function Clock() {
   const contents = createPoll("00:00", 1 * S_PER_MS, "date '+%H:%M'")
@@ -184,7 +184,7 @@ function MainInformation() {
     >
       <Clock />
       <UserContainer />
-      <ControlSliders />
+      <Weather />
       <MusicPlayer />
     </box>
   );

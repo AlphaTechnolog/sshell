@@ -213,7 +213,7 @@ export default function MusicPlayer() {
 
     const [width, height] = (await execAsync(`magick identify -format "%wx%h" ${image}`)).split("x");
 
-    const cmd = `magick convert "${image}" \
+    const cmd = `magick "${image}" \
       -blur 0x5 \
       ( -size "${width}x${height}" -background none -define gradient:direction=East gradient:${artGradient.from}-${artGradient.to} ) \
       -composite \

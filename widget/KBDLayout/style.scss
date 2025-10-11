@@ -10,12 +10,13 @@ window.KBDLayout {
     border-radius: 12px;
     padding: 22px 24px 32px 24px;
     margin: 20px;
-    box-shadow: 0px 0px 15px -1px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 15px -1px rgba(0, 0, 0, 0.2);
     &.Hidden { background: transparent; }
 
     .Icon {
       font-family: $font-icons;
       font-size: 84px;
+      color: $accent;
     }
 
     .LayoutName {
