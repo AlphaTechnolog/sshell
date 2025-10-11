@@ -27,7 +27,7 @@ const isCurrentDateSunUp = () => {
 }
 
 const isSunUp = (targetTimeString: string) => {
-  const baseDate = new Date();
+  const now = new Date();
   const [timeValue, ampm] = targetTimeString.toUpperCase().split(" ");
   let hour = parseInt(timeValue, 10);
 
@@ -37,9 +37,28 @@ const isSunUp = (targetTimeString: string) => {
     hour = 0;
   }
 
-  const targetDate = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), hour, 0, 0, 0);
-  const sunriseDate = new Date(SUNRISE);
-  const sunsetDate = new Date(SUNSET);
+  const targetDate = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    hour,
+    0,
+    0,
+    0
+  );
+
+  const sunriseSource = new Date(SUNRISE);
+  const sunsetSource = new Date(SUNSET);
+
+  const sunriseDate = new Date(targetDate);
+  sunriseDate.setHours(sunriseSource.getHours());
+  sunriseDate.setMinutes(sunriseSource.getMinutes());
+  sunriseDate.setSeconds(sunriseSource.getSeconds());
+
+  const sunsetDate = new Date(targetDate);
+  sunsetDate.setHours(sunsetSource.getHours());
+  sunsetDate.setMinutes(sunsetSource.getMinutes());
+  sunsetDate.setSeconds(sunsetSource.getSeconds());
 
   const targetTimeMs = targetDate.getTime();
   const sunriseTimeMs = sunriseDate.getTime();
