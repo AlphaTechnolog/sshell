@@ -6,6 +6,7 @@
 @use "./widget/ControlCenter/style.scss" as controlCenter;
 @use "./widget/Confirm/style.scss" as confirmPopup;
 @use "./widget/KBDLayout/style.scss" as kbdLayoutOSD;
+@use "./widget/LockScreen/main.scss" as lockscreen;
 
 * {
   all: unset;

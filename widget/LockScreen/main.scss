@@ -1,11 +1,68 @@
+@use "../../theme.scss" as *;
+
 .LockscreenContainer {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   color: $foreground;
+  font-family: $font-regular;
 
-  label {
-    font-size: 64px;
-    font-weight: 500;
+  @if $light_mode {
+    color: $background;
+  }
+
+  .ClockSection {
+    margin-top: 6rem;
+
+    .Date {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .Hour {
+      font-size: 128px;
+      font-weight: bold;
+    }
+  }
+
+  .LoginSection {
+    margin-bottom: 4rem;
+
+    .ProfilePhoto {
+      border-radius: 100px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .FallbackProfilePhoto {
+      background: $background;
+      color: $white;
+      border-radius: 100px;
+      font-size: 36px;
+      font-family: $font-icons;
+    }
+
+    .Username {
+      font-weight: 500;
+      font-size: 18px;
+    }
+
+    .PasswordEntry {
+      padding: 6px 12px;
+      font-size: 14px;
+      border-radius: 10px;
+      background-color: $contrast2;
+
+      @if $light_mode {
+        background-color: rgba($background, 0.05);
+      }
+    }
+
+    .ErrorMessage {
+      color: $red;
+      font-size: 14px;
+      font-weight: 500;
+    }
   }
 }

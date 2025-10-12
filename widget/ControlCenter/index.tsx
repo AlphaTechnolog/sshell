@@ -2,7 +2,7 @@ import app from "ags/gtk4/app";
 import { Astal, Gdk, Gtk } from "ags/gtk4";
 import { type Accessor, createBinding, createComputed, With } from "gnim";
 
-import { User } from "../../services";
+import { LockScreen, User } from "../../services";
 import { Body } from "./views";
 import { CircularProgress } from "../common/circular-progress";
 import { SystemStats } from "../../services/system-stats";
@@ -77,7 +77,7 @@ function Header() {
           class="LockButton"
           label={"\uE308"}
           valign={Gtk.Align.CENTER}
-          onClicked={() => console.log("TODO")}
+          onClicked={() => LockScreen.get_default().open()}
         />
         <button
           class="ScreenshotIcon"

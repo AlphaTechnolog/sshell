@@ -8,7 +8,7 @@ import { S_PER_MS } from "../../constants";
 
 import MusicPlayer from "./music-player";
 import Notifications from "./notifications";
-import { Uptime, User } from "../../services/";
+import { LockScreen, Uptime, User } from "../../services/";
 import { capitalize } from "../../utils";
 import { Weather } from "../common";
 import { usePoweroff } from "../../hooks";
@@ -41,11 +41,6 @@ function UserContainer() {
   const fmttedUptime = createBinding(uptime, "formatted");
 
   const { poweroff } = usePoweroff();
-
-  // TODO
-  function handleLockPC() {
-    console.log("handleLockPC");
-  }
 
   return (
     <box
@@ -136,7 +131,7 @@ function UserContainer() {
       >
         <button
           class="SystemActionButton LockButton"
-          onClicked={handleLockPC}
+          onClicked={() => LockScreen.get_default().open()}
           vexpand
           hexpand
           halign={Gtk.Align.CENTER}
