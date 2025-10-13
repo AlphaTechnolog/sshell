@@ -9,8 +9,12 @@ import ControlCenter from "./widget/ControlCenter";
 import Confirm from "./widget/Confirm";
 import KBDLayout from "./widget/KBDLayout";
 import LockScreen from "./widget/LockScreen";
+import Launcher from "./widget/Launcher";
 
-import { LockScreen as LockScreenService } from "./services";
+import {
+  LockScreen as LockScreenService,
+  Launcher as LauncherService,
+} from "./services";
 
 import "./daemons";
 
@@ -21,8 +25,12 @@ app.start({
     switch (action) {
       case "lock-screen-toggle": {
         LockScreenService.get_default().toggle();
-        res("toggle");
+        res("ok");
       } break;
+      case "launcher-toggle": {
+        LauncherService.get_default().toggle();
+        res("ok");
+      }; break;
     }
   },
   main() {
@@ -36,6 +44,7 @@ app.start({
         KBDLayout(mon);
         Notifications(mon);
         Confirm(mon);
+        Launcher(mon);
       }
     });
   },

@@ -1,0 +1,52 @@
+@use "../../theme.scss" as *;
+
+.Launcher {
+  background: transparent;
+  color: $foreground;
+
+  .ContentContainer {
+    background: $background;
+    min-width: 600px;
+    border-radius: 12px;
+    font-family: $font-regular;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 20px;
+    box-shadow: 0px 0px 15px -1px rgba(0, 0, 0, 0.5);
+
+    .EntryContainer {
+      padding: 16px;
+
+      .SearchIcon {
+        color: $accent;
+        font-family: $font-icons;
+        font-size: 18px;
+      }
+
+      .Textbox {
+        font-size: 16px;
+      }
+    }
+
+    .Separator {
+      min-height: 1px;
+      background-color: $black;
+    }
+
+    .Content {
+      padding: 12px;
+
+      button {
+        transition: all ease .2s;
+        border-radius: 7px;
+        padding: 12px;
+        &:hover { background-color: $contrast1; }
+        &.Selected { background-color: $contrast2; }
+        .ShortcutIcon {
+          font-family: $font-icons;
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}

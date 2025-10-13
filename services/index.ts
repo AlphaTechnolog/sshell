@@ -8,3 +8,4 @@ export * from "./confirm-service";
 export * from "./weather";
 export * from "./hyprsunset";
 export * from "./lockscreen";
+export * from "./launcher";
