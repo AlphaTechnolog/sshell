@@ -7,7 +7,7 @@ export class Launcher extends GObject.Object {
     return this.instance ||= new Launcher();
   }
 
-  #visible = true;
+  #visible = false;
 
   @getter(Boolean)
   get visible() { return this.#visible; }
