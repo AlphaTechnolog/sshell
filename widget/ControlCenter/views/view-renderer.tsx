@@ -1,7 +1,13 @@
 import { With, type Accessor } from "gnim"
 import { Views, type ViewContentProps, type ViewId } from "./types";
 
-import { Main } from "./views";
+import { Main, BluetoothConfig } from "./views";
+
+// register of views
+const mappedViews = {
+  [Views.Main]: Main,
+  [Views.BluetoothConfig]: BluetoothConfig,
+}
 
 export type ViewRendererProps = Record<string, any> & {
   id: Accessor<ViewId>,
@@ -15,12 +21,8 @@ export function ViewRenderer({ id, changeView }: ViewRendererProps) {
       changeView,
     };
 
-    const mapped = {
-      [Views.Main]: Main,
-    };
-
-    if (value in mapped) {
-      const Component = mapped[value];
+    if (value in mappedViews) {
+      const Component = mappedViews[value];
       return <Component {...props} />
     }
 

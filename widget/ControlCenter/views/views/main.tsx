@@ -1,10 +1,11 @@
 import { Gtk } from "ags/gtk4";
 import { ViewContainer } from "../view-container";
-import { type ViewContentProps } from "../types";
+import { Views, type ViewContentProps } from "../types";
 import { createBinding, createComputed, createState, For, With, type Accessor } from "gnim";
 
 import Hyprland from "gi://AstalHyprland";
 import Network from "gi://AstalNetwork";
+import Bluetooth from "gi://AstalBluetooth";
 import { Dnd, Theme, ActiveThemes, Hyprsunset } from "../../../../services";
 import { useNetworkIcon } from "../../../../hooks";
 import { exec, execAsync } from "ags/process";
@@ -201,7 +202,29 @@ function HyprsunsetChip() {
   )
 }
 
-function Chips() {
+function BluetoothChip({ viewController }: { viewController: ViewContentProps }) {
+  const bluetooth = Bluetooth.get_default();
+  const powered = createBinding(bluetooth, "is_powered");
+  const connected = createBinding(bluetooth, "is_connected");
+
+  const summary = createComputed(get => {
+    return get(connected) ? "Connected" : get(powered) ? "Powered on" : "Powered off";
+  });
+
+  return (
+    <Chip
+      icon={"\uE0DA"}
+      label="Bluetooth"
+      summary={summary}
+      showChevronRight
+      active={powered}
+      onToggle={() => bluetooth.toggle()}
+      onConfig={() => viewController.changeView(Views.BluetoothConfig)}
+    />
+  );
+}
+
+function Chips({ viewController }: { viewController: ViewContentProps }) {
   return (
     <box vexpand hexpand orientation={Gtk.Orientation.VERTICAL} homogeneous spacing={12}>
       <box hexpand valign={Gtk.Align.CENTER} vexpand orientation={Gtk.Orientation.HORIZONTAL} homogeneous spacing={12}>
@@ -210,7 +233,8 @@ function Chips() {
       </box>
       <box hexpand valign={Gtk.Align.CENTER} vexpand orientation={Gtk.Orientation.HORIZONTAL} homogeneous spacing={12}>
         <DarkModeChip />
-        <HyprsunsetChip />
+        <BluetoothChip viewController={viewController} />
+        {/*<HyprsunsetChip />*/}
       </box>
     </box>
   );
@@ -300,7 +324,7 @@ function KeyboardLayouts() {
               halign={Gtk.Align.START}
               valign={Gtk.Align.CENTER}
               label="Kb Layouts"
-              class="Header"
+              class="KbHeader"
             />
             <label
               class={revealChild(revealed => `CollapsedChip ${revealed ? "Invisible" : ""}`)}
@@ -360,11 +384,11 @@ function KeyboardLayouts() {
   )
 }
 
-export function Main(_: ViewContentProps) {
+export function Main(viewController: ViewContentProps) {
   return (
     <ViewContainer extraClass="MainView">
       <box vexpand hexpand orientation={Gtk.Orientation.VERTICAL} spacing={12}>
-        <Chips />
+        <Chips viewController={viewController} />
         <ControlSliders />
         <KeyboardLayouts />
       </box>

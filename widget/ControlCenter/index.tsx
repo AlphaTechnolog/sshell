@@ -149,7 +149,7 @@ export default function ControlCenter(gdkmonitor: Gdk.Monitor) {
         vexpand
         valign={Gtk.Align.START}
         halign={Gtk.Align.CENTER}
-        widthRequest={400}
+        widthRequest={425}
         orientation={Gtk.Orientation.VERTICAL}
         spacing={12}
       >

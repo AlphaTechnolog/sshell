@@ -1,4 +1,5 @@
 import app from "ags/gtk4/app";
+import GLib from "gi://GLib?version=2.0";
 import { Astal, Gdk, Gtk } from "ags/gtk4";
 import { createPoll, timeout } from "ags/time";
 import { type Accessor, createBinding, createState, onCleanup, With } from "gnim";
@@ -15,7 +16,7 @@ function MainSurface({ visible }: {
   primary: boolean,
 }) {
   // TODO: Use the wallpaper service.
-  const path = "/home/alpha/Pictures/1-scenery-pink-lakeside-sunset-lake-landscape-scenic-panorama-7680x3215-144.blurred.png";
+  const path = GLib.get_home_dir() + "/wallpaper.lockscreen.jpg";
 
   const user = User.get_default();
   const pfp = createBinding(user, "pfp");

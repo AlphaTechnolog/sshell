@@ -1,5 +1,6 @@
 export const Views = {
   Main: 0,
+  BluetoothConfig: 1,
 };
 
 export type ViewId = typeof Views[keyof typeof Views];

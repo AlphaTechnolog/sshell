@@ -7,26 +7,34 @@ import { Launcher as LauncherService } from "../../services";
 import Apps from "gi://AstalApps";
 import Graphene from "gi://Graphene";
 import { clamp } from "../../utils";
+import { execAsync } from "ags/process";
 
 const MAX_APPS = 8;
+
+function useLaunch() {
+  const launcherService = LauncherService.get_default();
+
+  function launch(app?: Apps.Application) {
+    if (app) {
+      launcherService.close();
+      app.set_frequency(app.get_frequency() + 1);
+      execAsync(["bash", "-c", "cd $HOME && " + app.get_executable()]);
+    }
+  }
+
+  return { launch };
+}
 
 function AppItem({ app, index, selectedIndex }: {
   app: Apps.Application,
   index: Accessor<number>,
   selectedIndex: Accessor<number>,
 }) {
-  const launcherService = LauncherService.get_default();
+  const { launch } = useLaunch();
 
   const classname = createComputed(get => {
     return get(selectedIndex) === get(index) ? "Selected" : "";
   });
-
-  function launch(app?: Apps.Application) {
-    if (app) {
-      launcherService.close();
-      app.launch();
-    }
-  }
 
   return (
     <button
@@ -56,6 +64,8 @@ export default function Launcher(gdkmonitor: Gdk.Monitor) {
   const apps = new Apps.Apps();
   const launcherService = LauncherService.get_default();
 
+  const { launch } = useLaunch();
+
   const [appsList, setAppsList] = createState<Apps.Application[]>(apps.fuzzy_query("").slice(0, MAX_APPS));
   const [selectedIndex, setSelectedIndex] = createState(0);
   const visible = createBinding(launcherService, "visible");
@@ -72,13 +82,6 @@ export default function Launcher(gdkmonitor: Gdk.Monitor) {
 
   function search(text: string) {
     setAppsList(apps.fuzzy_query(text).slice(0, MAX_APPS));
-  }
-
-  function launch(app?: Apps.Application) {
-    if (app) {
-      launcherService.close();
-      app.launch();
-    }
   }
 
   function onKey(

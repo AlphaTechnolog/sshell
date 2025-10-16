@@ -1,0 +1,17 @@
+@use "../../theme.scss" as *;
+
+.SwitchContainer {
+  padding: 2px;
+  background-color: $accent;
+  border-radius: 100px;
+
+  .Handle {
+    background-color: $background;
+    border-radius: 100px;
+  }
+
+  &.Inactive {
+    background-color: $contrast2;
+    .Handle { background-color: $foreground; }
+  }
+}

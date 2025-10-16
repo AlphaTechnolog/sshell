@@ -55,7 +55,7 @@
       background-color: $contrast2;
 
       @if $light_mode {
-        background-color: rgba($background, 0.05);
+        background-color: rgba(#ffffff, 0.15);
       }
     }
 
