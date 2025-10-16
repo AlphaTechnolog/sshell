@@ -1,0 +1,36 @@
+@use "../../theme.scss" as *;
+
+$width: 14px;
+$height: calc($width / 2);
+$padding: 2px;
+$radius: 4px;
+$color: $foreground;
+
+.BatteryIconContainer {
+  border: solid 2px $color;
+  background: transparent;
+  min-width: $width;
+  min-height: $height;
+  border-radius: $radius;
+  padding: $padding;
+
+  scale trough {
+    all: unset;
+    background-color: transparent;
+    min-height: $height;
+    min-width: $width;
+
+    highlight {
+      all: unset;
+      background-color: $color;
+    }
+  }
+}
+
+.BatteryChip {
+  min-width: 3px;
+  min-height: 4px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  background-color: $color;
+}

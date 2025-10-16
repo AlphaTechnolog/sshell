@@ -1,17 +1,31 @@
 @use "../../theme.scss" as *;
 
 .SwitchContainer {
+  $width: 35px;
+  $padding: 2px;
+  $handle-size: 15px;
+
+  min-width: $width;
+  min-height: $handle-size - (2 * $padding);
   padding: 2px;
   background-color: $accent;
   border-radius: 100px;
 
   .Handle {
-    background-color: $background;
+    background-color: $solid-bg;
     border-radius: 100px;
+    min-height: $handle-size;
+    min-width: $handle-size;
+    margin-left: $width - $handle-size - ($padding - calc($padding / 2));
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   &.Inactive {
     background-color: $contrast2;
-    .Handle { background-color: $foreground; }
+
+    .Handle {
+      background-color: $foreground; 
+      margin-left: 0px;
+    }
   }
 }

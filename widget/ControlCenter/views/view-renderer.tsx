@@ -5,6 +5,9 @@ import { Main, BluetoothConfig } from "./views";
 
 // register of views
 const mappedViews = {
+  // [Views.BluetoothConfig]: Main,
+  // [Views.Main]: BluetoothConfig,
+
   [Views.Main]: Main,
   [Views.BluetoothConfig]: BluetoothConfig,
 }
