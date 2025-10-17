@@ -49,7 +49,7 @@ export function DndIcon() {
 
   return (
     <label
-      label={"\uE330"}
+      label={"\uE0D2"}
       visible={enabled}
       class="PhosphorIcon DndIcon"
     />

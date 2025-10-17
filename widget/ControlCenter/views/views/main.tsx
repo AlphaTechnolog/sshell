@@ -7,7 +7,7 @@ import { createBinding, createComputed, createState, For, With, type Accessor } 
 import Hyprland from "gi://AstalHyprland";
 import Network from "gi://AstalNetwork";
 import Bluetooth from "gi://AstalBluetooth";
-import { Dnd, Theme, ActiveThemes, Hyprsunset, LockScreen, User, SystemStats } from "../../../../services";
+import { Dnd, Theme, ActiveThemes, LockScreen, User, SystemStats } from "../../../../services";
 import { useNetworkIcon, usePoweroff } from "../../../../hooks";
 import { exec, execAsync } from "ags/process";
 import { ControlSliders, CircularProgress } from "../../../common";
@@ -137,8 +137,8 @@ function DndChip() {
   const dnd = Dnd.get_default();
   const enabled = createBinding(dnd, "enabled");
   const icon = createComputed([enabled], e => {
-    return e ? "\uE330" : "\uE5EA";
-  })
+    return e ? "\uE0CE" : "\uE5EA";
+  });
 
   return (
     <Chip
@@ -188,22 +188,6 @@ function DarkModeChip() {
   );
 }
 
-function HyprsunsetChip() {
-  const hyprsunset = Hyprsunset.get_default();
-  const isRunning = createBinding(hyprsunset, "is_running");
-
-  return (
-    <Chip
-      icon={"\uE2DC"}
-      label="Hyprsunset"
-      summary={isRunning(r => `Night light is ${r ? "on" : "off"}`)}
-      showChevronRight={false}
-      active={isRunning}
-      onToggle={() => hyprsunset.toggle()}
-    />
-  )
-}
-
 function BluetoothChip({ viewController }: { viewController: ViewContentProps }) {
   const bluetooth = Bluetooth.get_default();
   const powered = createBinding(bluetooth, "is_powered");
@@ -241,7 +225,6 @@ function Chips({ viewController }: { viewController: ViewContentProps }) {
       <box hexpand valign={Gtk.Align.CENTER} vexpand orientation={Gtk.Orientation.HORIZONTAL} homogeneous spacing={12}>
         <DarkModeChip />
         <BluetoothChip viewController={viewController} />
-        {/*<HyprsunsetChip />*/}
       </box>
     </box>
   );
