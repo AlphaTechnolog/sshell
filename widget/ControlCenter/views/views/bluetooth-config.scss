@@ -39,6 +39,28 @@
       }
     }
 
+    .BluetoothPlaceholder {
+      .Icon {
+        font-family: $font-icons;
+        font-size: 100px;
+        color: $accent;
+      }
+
+      .Title {
+        font-size: 20px;
+        font-weight: 500;
+        font-family: $font-regular;
+        color: $foreground;
+      }
+
+      .Description {
+        font-size: 12px;
+        font-weight: 500;
+        font-family: $font-regular;
+        color: $contrastfg;
+      }
+    }
+
     .DeviceItem {
       padding: 12px 16px;
       border-radius: 12px;

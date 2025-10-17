@@ -14,7 +14,8 @@ import {
   createComputed,
   For,
   createState,
-  onCleanup
+  onCleanup,
+  With
 } from "gnim";
 
 function Header({ changeView }: Partial<ViewContentProps>) {
@@ -327,8 +328,61 @@ function DevicesAccordion({
   );
 }
 
+function DefaultPlaceholder() {
+  const bluetooth = Bluetooth.get_default();
+  const powered = createBinding(bluetooth, "is_powered");
+
+  const icon = createComputed(get => {
+    return get(powered) ? "\uE0DA" : "\uE0DE";
+  });
+
+  return (
+    <box
+      vexpand
+      hexpand
+      class="BluetoothPlaceholder"
+      heightRequest={250}
+    >
+      <box
+        vexpand
+        valign={Gtk.Align.CENTER}
+        hexpand
+        orientation={Gtk.Orientation.VERTICAL}
+      >
+        <label
+          label={icon}
+          hexpand
+          halign={Gtk.Align.CENTER}
+          valign={Gtk.Align.CENTER}
+          xalign={0.5}
+          class="Icon"
+        />
+        <label
+          marginTop={12}
+          label={powered(p => p ? "No Devices" : "Bluetooth is off")}
+          class="Title"
+          valign={Gtk.Align.CENTER}
+          hexpand
+          halign={Gtk.Align.CENTER}
+          xalign={0.5}
+        />
+        <label
+          marginTop={7}
+          label={powered(p => p ? "Scanning is being down in the background" : "Turn bluetooth on to get started")}
+          class="Description"
+          valign={Gtk.Align.CENTER}
+          hexpand
+          halign={Gtk.Align.CENTER}
+          xalign={0.5}
+        />
+      </box>
+    </box>
+  );
+}
+
 function Body() {
   const bluetooth = Bluetooth.get_default();
+  const powered = createBinding(bluetooth, "is_powered");
 
   const [pairedDevices, setPairedDevices] = createState<Bluetooth.Device[]>(
     bluetooth.get_devices().filter(x => x.paired),
@@ -336,6 +390,11 @@ function Body() {
   const [unpairedDevices, setUnpairedDevices] = createState<Bluetooth.Device[]>(
     bluetooth.get_devices().filter(x => !x.paired),
   );
+
+  const shouldShowContent = createComputed(get => {
+    if (get(powered) === false) return false;
+    return get(pairedDevices).length > 0 || get(unpairedDevices).length > 0;
+  });
 
   bluetooth.connect("device-added", (_, device) => {
     if (device.paired) setPairedDevices([
@@ -402,19 +461,28 @@ function Body() {
       vexpand
       hexpand
       class="Content"
-      orientation={Gtk.Orientation.VERTICAL}
-      spacing={12}
     >
-      <DevicesAccordion
-        label="Paired devices"
-        devices={pairedDevices}
-        postDeviceAction={postDeviceAction}
-      />
-      <DevicesAccordion
-        label="Unpaired devices"
-        devices={unpairedDevices}
-        postDeviceAction={postDeviceAction}
-      />
+      <With value={shouldShowContent}>
+        {canShow => !canShow ? <DefaultPlaceholder /> : (
+          <box
+            hexpand
+            vexpand
+            orientation={Gtk.Orientation.VERTICAL}
+            spacing={12}
+          >
+            <DevicesAccordion
+              label="Paired devices"
+              devices={pairedDevices}
+              postDeviceAction={postDeviceAction}
+            />
+            <DevicesAccordion
+              label="Unpaired devices"
+              devices={unpairedDevices}
+              postDeviceAction={postDeviceAction}
+            />
+          </box>
+        )}
+      </With>
     </box>
   );
 }
