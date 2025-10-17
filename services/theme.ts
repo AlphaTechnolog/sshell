@@ -90,7 +90,7 @@ export class Theme extends GObject.Object {
     return this.instance ||= new Theme();
   }
 
-  // TODO: Maybe in a future i will like the config not to be reliant on
+  // TODO: Maybe in a future i would like the config not to be reliant on
   // .config/ags because, per example, nixos could be an issue.
   private static STYLE_FILE = GLib.get_user_config_dir() + "/ags/theme.scss";
 
