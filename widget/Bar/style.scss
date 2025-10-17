@@ -59,8 +59,11 @@ window.Bar {
 
       .Poweroff {
         transition: all ease .2s;
-        padding: 4px 9px;
+        padding: 4px 8px;
         border-radius: 7px;
+        font-family: $font-icons;
+        font-size: 18px;
+        font-weight: 500;
 
         &:hover {
           background-color: $contrast1;

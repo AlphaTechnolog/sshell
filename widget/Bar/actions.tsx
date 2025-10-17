@@ -1,11 +1,10 @@
 import app from "ags/gtk4/app";
-import { createBinding, createComputed, createState } from "gnim";
+import { createBinding, createState } from "gnim";
 import { Gtk } from "ags/gtk4";
 
 import Wp from "gi://AstalWp";
-import { Confirm, Dnd } from "../../services";
+import { Dnd } from "../../services";
 
-import { exec, execAsync } from "ags/process";
 import { clamp } from "../../utils/math";
 
 import MusicIndicator from "./music-indicator";
@@ -14,7 +13,7 @@ import { usePoweroff } from "../../hooks";
 
 const wp = Wp.get_default();
 
-// FIXME: I need to try this out in a system with wifi support
+// TODO: I need to try this out in a system with wifi support
 export function NetworkIcon() {
   const { icon } = useNetworkIcon();
 
@@ -81,7 +80,7 @@ export default function Actions(args: { $type: string; }) {
       </button>
       <button
         class="Poweroff"
-        iconName="system-shutdown"
+        label={"\uE3DA"}
         onClicked={poweroff}
       />
     </box>

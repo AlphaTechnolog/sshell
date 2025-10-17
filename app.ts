@@ -20,6 +20,7 @@ import "./daemons";
 
 app.start({
   css: style,
+  iconTheme: "Papirus",
   requestHandler: (argv: string[], res: (response: string) => void): void => {
     const [action, ..._params] = argv;
     switch (action) {

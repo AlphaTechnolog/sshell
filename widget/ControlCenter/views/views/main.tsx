@@ -12,6 +12,7 @@ import { useNetworkIcon, usePoweroff } from "../../../../hooks";
 import { exec, execAsync } from "ags/process";
 import { ControlSliders, CircularProgress } from "../../../common";
 import { S_PER_MS } from "../../../../constants";
+import { maxLength } from "../../../../utils";
 
 type ChipProps = {
   icon: string | Accessor<string>;
@@ -209,7 +210,12 @@ function BluetoothChip({ viewController }: { viewController: ViewContentProps })
   const connected = createBinding(bluetooth, "is_connected");
 
   const summary = createComputed(get => {
-    return get(connected) ? "Connected" : get(powered) ? "Powered on" : "Powered off";
+    if (get(connected)) {
+      const device = bluetooth.get_devices().find(x => x.connected);
+      if (!device) return "Connected";
+      return maxLength(device.get_name(), 13);
+    }
+    return get(powered) ? "Powered on" : "Powered off";
   });
 
   return (

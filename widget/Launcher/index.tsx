@@ -6,8 +6,11 @@ import { Launcher as LauncherService } from "../../services";
 
 import Apps from "gi://AstalApps";
 import Graphene from "gi://Graphene";
+
 import { clamp } from "../../utils";
 import { execAsync } from "ags/process";
+import { interval } from "ags/time";
+import { S_PER_MS } from "../../constants";
 
 const MAX_APPS = 8;
 
@@ -17,8 +20,7 @@ function useLaunch() {
   function launch(app?: Apps.Application) {
     if (app) {
       launcherService.close();
-      app.set_frequency(app.get_frequency() + 1);
-      execAsync(["bash", "-c", "cd $HOME && " + app.get_executable()]);
+      app.launch();
     }
   }
 
@@ -63,6 +65,8 @@ export default function Launcher(gdkmonitor: Gdk.Monitor) {
 
   const apps = new Apps.Apps();
   const launcherService = LauncherService.get_default();
+
+  interval(5 * S_PER_MS, () => apps.reload());
 
   const { launch } = useLaunch();
 

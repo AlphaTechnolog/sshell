@@ -27,11 +27,16 @@
   }
 
   .Content {
-    padding: 12px;
+    padding: 16px;
 
     .Title {
       font-weight: 500;
       font-size: 16px;
+
+      .Icon {
+        font-family: $font-icons;
+        font-size: 18px;
+      }
     }
 
     .DeviceItem {
@@ -61,6 +66,24 @@
       .BatteryPercentage {
         font-weight: 500;
         font-size: 12px;
+      }
+
+      .ActionButton {
+        font-size: 14px;
+        font-weight: 500;
+        background-color: $contrast1;
+        border-radius: 7px;
+        padding: 7px 12px;
+        transition: all ease .2s;
+
+        &:hover { background-color: $contrast2; }
+
+        &.MoreContrast {
+          background-color: $contrast2;
+          &:hover {
+            background-color: $contrast3;
+          }
+        }
       }
     }
   }
