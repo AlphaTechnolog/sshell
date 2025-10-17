@@ -1,6 +1,7 @@
 import app from "ags/gtk4/app";
-import { Gdk, Astal } from "ags/gtk4";
+import { Gtk, Gdk, Astal } from "ags/gtk4";
 
+import AppsLauncher from "./apps-launcher";
 import Workspaces from "./workspaces";
 import Clock from "./clock";
 import Actions from "./actions";
@@ -18,7 +19,14 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       application={app}
     >
       <centerbox cssName="centerbox">
-        <Workspaces $type="start" />
+        <box
+          $type="start"
+          orientation={Gtk.Orientation.HORIZONTAL}
+          spacing={7}
+        >
+          <AppsLauncher />
+          <Workspaces />
+        </box>
         <Clock $type="center" />
         <Actions $type="end" />
       </centerbox>

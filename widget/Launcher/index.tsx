@@ -156,7 +156,7 @@ export default function Launcher(gdkmonitor: Gdk.Monitor) {
         halign={Gtk.Align.CENTER}
         orientation={Gtk.Orientation.VERTICAL}
       >
-        <box class="EntryContainer" spacing={7}>
+        <box class="EntryContainer" spacing={12}>
           <label
             class="SearchIcon"
             label={"\uE30C"}

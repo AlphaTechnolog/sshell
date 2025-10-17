@@ -13,6 +13,18 @@ window.Bar {
     background: rgba($background, $general-opacity);
     padding: 4px 8px;
 
+    button.AppsLauncherButton {
+      padding: 7px;
+      border-radius: 7px;
+      transition: all ease .2s;
+      font-family: $font-icons;
+      font-size: 16px;
+      color: $accent;
+      &:hover {
+        background-color: rgba($accent, 0.15);
+      }
+    }
+
     .WorkspacesContainer .Button {
       padding: 6px 12px;
       transition: all ease .2s;
