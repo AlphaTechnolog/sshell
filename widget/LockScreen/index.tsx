@@ -1,16 +1,14 @@
 import app from "ags/gtk4/app";
 import GLib from "gi://GLib?version=2.0";
 import { Astal, Gdk, Gtk } from "ags/gtk4";
-import { createPoll, timeout, Timer } from "ags/time";
+import { createPoll, timeout } from "ags/time";
 import { type Accessor, createBinding, createState, onCleanup, With } from "gnim";
 
 import Auth from "gi://AstalAuth";
 import { LockScreen as LockScreenService, User } from "../../services";
-import { MIN_PER_MS, S_PER_MS } from "../../constants";
+import { S_PER_MS } from "../../constants";
 import { capitalize } from "../../utils";
-import { execAsync } from "ags/process";
 
-const SUSPEND_TIMEOUT = 1 * MIN_PER_MS;
 const REVEAL_LOCKSCREEN_TIMEOUT = 0.5 * S_PER_MS;
 
 function MainSurface({ visible }: {
@@ -30,20 +28,10 @@ function MainSurface({ visible }: {
   const [errorMessage, setErrorMessage] = createState("");
   const [revealChild, setRevealChild] = createState(visible.get());
 
-  let suspendTimer: Timer | undefined = undefined;
-  const setupSuspendTimeout = () => {
-    suspendTimer = timeout(SUSPEND_TIMEOUT, () => {
-      suspendTimer = timeout(5 * S_PER_MS, () => {
-        execAsync(["systemctl", "suspend"]);
-      });
-    });
-  }
-
   // 1. use visible to open lockscreen.
   // 2. use revealChild to close lockscreen.
   const disposeRevealChild = revealChild.subscribe(() => {
     if (!revealChild.get()) {
-      if (suspendTimer) suspendTimer.cancel();
       timeout(REVEAL_LOCKSCREEN_TIMEOUT, () => {
         LockScreenService.get_default().close();
       });
@@ -55,7 +43,6 @@ function MainSurface({ visible }: {
       if (visible.get()) {
         self.grab_focus_without_selecting();
         setRevealChild(true);
-        setupSuspendTimeout();
       }
     });
 

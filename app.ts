@@ -24,6 +24,14 @@ app.start({
   requestHandler: (argv: string[], res: (response: string) => void): void => {
     const [action, ..._params] = argv;
     switch (action) {
+      case "lock-screen-open": {
+        LockScreenService.get_default().open();
+        res("ok");
+      } break;
+      case "lock-screen-close": {
+        LockScreenService.get_default().close();
+        res("ok");
+      } break;
       case "lock-screen-toggle": {
         LockScreenService.get_default().toggle();
         res("ok");
