@@ -15,8 +15,10 @@ import {
   For,
   createState,
   onCleanup,
-  With
+  With,
+  onMount
 } from "gnim";
+import { timeout } from "ags/time";
 
 function Header({ changeView }: Partial<ViewContentProps>) {
   const bluetooth = Bluetooth.get_default();
@@ -368,7 +370,7 @@ function DefaultPlaceholder() {
         />
         <label
           marginTop={7}
-          label={powered(p => p ? "Scanning is being down in the background" : "Turn bluetooth on to get started")}
+          label={powered(p => p ? "Scanning is running in the background..." : "Turn bluetooth on to get started")}
           class="Description"
           valign={Gtk.Align.CENTER}
           hexpand
@@ -381,6 +383,7 @@ function DefaultPlaceholder() {
 }
 
 function Body() {
+  const DISCOVERY_RETRY_TIMEOUT = 2 * S_PER_MS;
   const bluetooth = Bluetooth.get_default();
   const powered = createBinding(bluetooth, "is_powered");
 
@@ -416,6 +419,44 @@ function Body() {
       ...variable.get().slice(0, idx),
       ...variable.get().slice(idx + 1),
     ]);
+  });
+
+  const startDiscovery = (adapter: Bluetooth.Adapter) => {
+    try {
+      adapter.start_discovery();
+    } catch (err) {
+      console.error("[bluetooth] discovery failed with", err);
+      timeout(DISCOVERY_RETRY_TIMEOUT, () => {
+        startDiscovery(adapter);
+      });
+    }
+  }
+
+  const disposePowered = powered.subscribe(() => {
+    const adapter = bluetooth.get_adapter();
+    if (powered.get() && adapter && !adapter.discovering) {
+      startDiscovery(adapter);
+    } else if (!powered.get() && adapter && adapter.discovering) {
+      adapter.stop_discovery();
+    }
+  });
+
+  bluetooth.connect("adapter-added", (_, adapter) => {
+    if (powered.get() && !adapter.discovering) {
+      startDiscovery(adapter);
+    }
+  });
+
+  // start discovering when this mounts if needed.
+  const adapter = bluetooth.get_adapter();
+  if (powered.get() && adapter && !adapter.discovering) {
+    startDiscovery(adapter);
+  }
+
+  onCleanup(() => {
+    disposePowered();
+    const adapter = bluetooth.get_adapter();
+    if (adapter && adapter.discovering) adapter.stop_discovery();
   });
 
   const postDeviceAction = (device: Bluetooth.Device) => {
