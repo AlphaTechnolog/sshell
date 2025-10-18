@@ -15,7 +15,7 @@ export type ActiveTheme = typeof ActiveThemes[keyof typeof ActiveThemes];
 const palettes = {
   [ActiveThemes.dark]: {
     ["light_mode"]: "false",
-    ["background"]: "#000000",
+    ["background"]: "#0a0a0a",
     ["solid-bg"]: "#0a0a0a",
     ["foreground"]: "#cdcdcd",
     ["black"]: "#242424",
@@ -34,7 +34,7 @@ const palettes = {
     ["light_magenta"]: "#ecaad6",
     ["light_cyan"]: "#f591b2",
     ["light_white"]: "#cac9dd",
-    ["general-opacity"]: "0.85",
+    ["general-opacity"]: "1",
     ["contrast1"]: "rgba(#ffffff, 0.05)",
     ["contrast2"]: "rgba(#ffffff, 0.1)",
     ["contrast3"]: "rgba(#ffffff, 0.15)",
